@@ -1,7 +1,34 @@
+<?php
+    include_once("CouplifyDB.php");
+    include_once("Utility.php");
+
+    $utility = new Utility();
+
+    $userDetails = [];
+    $additionalDetails = [];
+    $userAddress = [];
+    if(isset($_GET["userID"])){
+        $db = new CouplifyDB();
+        if($db->isUserExists($_GET["userID"])){
+            $userDetails = $db->getUserDetails($_GET["userID"]);
+            $additionalDetails = $db->getAdditionalDetails($_GET["userID"]);
+            $userAddress = $db->getUserAddress($_GET["userID"]);
+        }else{
+            header("Location: error404.php");
+        }
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <?php include_once("./head.php"); ?>
+    <style>
+        .interestDetailList {
+            list-style-type: disc;
+            padding-left: 20px;
+            line-height: 100%;
+        }
+    </style>
 </head>
 <body>
 <?php include_once("./preloader.php"); ?>
@@ -16,22 +43,25 @@
                 <div class="columns is-multiline no-margin">
                     <div class="column is-paddingless">
                         <div class="avatar">
-                            <img style="border-radius: 50%;margin-left: 420px;height: 200px; width: 200px;" id="user-avatar" class="avatar-image" src="assets/profilePhotos/1.jpg" alt="">
+                            <img style="border-radius: 50%;margin-left: 420px;height: 200px; width: 200px;" id="user-avatar" class="avatar-image" src="<?php echo $userDetails["profilePhoto"]; ?>" alt="">
                         </div>
 
                         <div class="profile-subheader">
-                            <div class="subheader-start is-hidden-mobile">
-                                <span></span>
-                                <span></span>
+                            <div class="subheader-end is-hidden-mobile" style="text-align: left;">
+                                <a class="button has-icon is-bold">
+                                    <i data-feather="star"></i>
+                                    &nbsp;
+                                    <span>Add to favourites</span>
+                                </a>
                             </div>
                             <div class="subheader-middle" style="margin-left: -100px;">
-                                <h2>Bulma Brief</h2>
-                                <span>Female</span>
+                                <h2><?php echo $userDetails["lastName"]." ".$userDetails["firstName"]; ?></h2>
+                                <span><?php echo $userDetails["gender"]; ?></span>
                             </div>
                             <div class="subheader-end is-hidden-mobile">
                                 <a class="button has-icon is-bold">
-                                    <i data-feather="star"></i>
-                                    <span>Add to Favourites</span>
+                                    <i data-feather="message-circle"></i>
+                                    <span>Send Message</span>
                                 </a>
                             </div>
                         </div>
@@ -72,28 +102,28 @@
                                         <div class="flex-block">
                                             <img src="assets/img/custom/work.png" alt="">
                                             <div class="flex-block-meta">
-                                                <span>I am working as <a>Doctor</a></span>
+                                                <span>I am working as <a><?php echo $additionalDetails["workingIndustry"]; ?></a></span>
                                             </div>
                                         </div>
 
                                         <div class="flex-block">
                                             <img src="assets/img/custom/location.png" alt="">
                                             <div class="flex-block-meta">
-                                                <span>Lives in <a>Toronto, ON</a></span>
+                                                <span>Lives in <a><?php echo $userAddress["city"].", ".$userAddress["state"]; ?></a></span>
                                             </div>
                                         </div>
 
                                         <div class="flex-block">
                                             <img src="assets/img/custom/love.png" alt="">
                                             <div class="flex-block-meta">
-                                                <span>I am <a>Single</a></span>
+                                                <span>I am <a><?php echo $userDetails["maritalStatus"]; ?></a></span>
                                             </div>
                                         </div>
 
                                         <div class="flex-block">
                                             <img src="assets/img/custom/search.png" alt="">
                                             <div class="flex-block-meta">
-                                                <span>Looking for <a>Male</a></span>
+                                                <span>Looking for <a><?php echo $userDetails["lookingFor"]; ?></a></span>
                                             </div>
                                         </div>
                                     </div>
@@ -102,7 +132,7 @@
                                         <div class="about-summary">
                                             <div class="content">
                                                 <h3>About Me</h3>
-                                                <p>A biography, or simply bio, is a detailed description of a person's life. It involves more than just the basic facts like education, work, relationships, and death; it portrays a person's experience of these life events.</p>
+                                                <p><?php echo $userDetails["aboutMe"]; ?></p>
                                             </div>
                                         </div>
                                     </div>
@@ -122,13 +152,160 @@
 
                                     <div class="body has-flex-list">
                                         <div class="photo-list">
-                                            <div class="photo-wrapper" style="width: 250px;height: 200px;cursor: pointer;">
-                                                <div class="photo-overlay"></div>
-                                                <img src="assets/img/demo/groups/1.jpg" alt="" style="width: 250px;height: 200px;cursor: pointer;">
-                                            </div>
+                                            <?php
+                                                $userPhotos = $utility->getUserPhotos($userDetails["userID"]);
+                                                if($userPhotos){
+                                                    foreach ($userPhotos as $photo){
+                                                        echo '<div class="photo-wrapper" style="width: 250px;height: 200px;cursor: pointer;">';
+                                                        echo '<div class="photo-overlay"></div>';
+                                                        echo '<img src="./assets/photos/'.$userDetails["userID"].'/'.$photo.'" alt="" style="width: 250px;height: 200px;cursor: pointer;">';
+                                                        echo '</div>';
+                                                    }
+                                                }else{
+                                                    echo '<div class="photo-wrapper">';
+                                                    echo "No photos found";
+                                                    echo '</div>';
+                                                }
+                                            ?>
                                         </div>
                                     </div>
+                                    </div>
+                                </div>
 
+                                <!--  Interests Content -->
+
+                                <div id="interests-content" class="columns content-section has-portrait-padding">
+                                    <div class="column">
+                                        <div class="card page-about-card">
+                                            <div class="card-title">
+                                                <h4>About <?php echo $userDetails["lastName"]." ".$userDetails["firstName"]; ?></h4>
+                                            </div>
+                                            <div class="about-body">
+                                                <div class="columns">
+                                                    <div class="column is-4">
+                                                        <!-- Hobbies -->
+                                                        <div class="about-block">
+                                                            <div class="block-header">
+                                                                <h4>Hobbies</h4>
+                                                            </div>
+                                                            <div class="block-content">
+                                                                <ul class="interestDetailList">
+                                                                    <?php
+                                                                        $hobbies = explode(",", $additionalDetails["hobbies"]);
+                                                                        foreach ($hobbies as $hobby) {
+                                                                            echo "<li>";
+                                                                            echo "<div class='flex-inner'>";
+                                                                            echo "<span>".$hobby."</span>";
+                                                                            echo "</div>";
+                                                                            echo "</li>";
+                                                                        }
+                                                                    ?>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Languages -->
+                                                        <div class="about-block">
+                                                            <div class="block-header">
+                                                                <h4>Known Languages</h4>
+                                                            </div>
+                                                            <div class="block-content">
+                                                                <ul class="interestDetailList">
+                                                                    <?php
+                                                                        $languages = explode(",", $additionalDetails["knownLanguages"]);
+                                                                        foreach ($languages as $language) {
+                                                                            echo "<li>";
+                                                                            echo "<div class='flex-inner'>";
+                                                                            echo "<span>".$language."</span>";
+                                                                            echo "</div>";
+                                                                            echo "</li>";
+                                                                        }
+                                                                    ?>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="column is-4">
+                                                        <!-- Cuisine Preferences -->
+                                                        <div class="about-block">
+                                                            <div class="block-header">
+                                                                <h4>Cuisine Preferences</h4>
+                                                            </div>
+                                                            <div class="block-content">
+                                                                <ul class="interestDetailList">
+                                                                    <?php
+                                                                        $cuisinePreferences = explode(",", $additionalDetails["cuisinePreferences"]);
+                                                                        foreach ($cuisinePreferences as $cuisineType) {
+                                                                            echo "<li>";
+                                                                            echo "<div class='flex-inner'>";
+                                                                            echo "<span>".$cuisineType."</span>";
+                                                                            echo "</div>";
+                                                                            echo "</li>";
+                                                                        }
+                                                                    ?>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Date of birth -->
+                                                        <div class="about-block">
+                                                            <div class="block-header">
+                                                                <h4>Date of Birth</h4>
+                                                            </div>
+                                                            <div class="block-content">
+                                                                <ul class="interestDetailList">
+                                                                    <li>
+                                                                        <div class="flex-inner">
+                                                                            <span>
+                                                                                <?php
+                                                                                    $age = date_diff(date_create($userDetails["dateOfBirth"]), date_create('today'))->y;
+                                                                                    echo date_format(date_create($userDetails["dateOfBirth"]),"D, jS M Y");
+                                                                                    echo " (".$age.")";
+                                                                                ?>
+                                                                            </span>
+                                                                        </div>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="column is-4">
+                                                        <!-- Total Children -->
+                                                        <div class="about-block">
+                                                            <div class="block-header">
+                                                                <h4>Other details</h4>
+                                                            </div>
+                                                            <div class="block-content">
+                                                                <ul>
+                                                                    <li>
+                                                                        <div class='flex-inner'>
+                                                                            <span>Looking for: <?php echo $userDetails["lookingFor"] ?></span>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li>
+                                                                        <div class='flex-inner'>
+                                                                            <span>Marital Status: <?php echo $userDetails["maritalStatus"] ?></span>
+                                                                        </div>
+                                                                    </li>
+                                                                    <?php
+                                                                        if($userDetails["totalChildren"] > 0){
+                                                                            echo "<li>";
+                                                                            echo "<div class='flex-inner'>";
+                                                                            echo "<span>Total Children: ".$userDetails["totalChildren"]."</span>";
+                                                                            echo "</div>";
+                                                                            echo "</li>";
+                                                                        }
+                                                                    ?>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

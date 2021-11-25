@@ -5,7 +5,7 @@
 <meta http-equiv="x-ua-compatible" content="ie=edge">
 
 <title>Couplify :: There’s someone for everyone.</title>
-<link rel="icon" type="image/png" href="assets/img/favicon.png" />
+<link rel="icon" type="image/png" href="assets/img/logo.png" />
 <!-- Fonts -->
 <link href="assets/googlefonts/csse409.css?family=Montserrat:600,700,800,900" rel="stylesheet">
 <link href="assets/googlefonts/css0981.css?family=Roboto:400,500" rel="stylesheet">

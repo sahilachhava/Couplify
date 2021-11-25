@@ -1,17 +1,11 @@
 <?php
-    $allUsers = [];
+    include_once("CouplifyDB.php");
+    include_once("Utility.php");
+    const MAX_PAIRS_OF_FILTER_TO_CREATE = 3;
+    const MAX_USER_PER_ROW = 4;
 
-    $connectionToDatabase = new PDO('mysql:host=127.0.0.1:3306;dbname=couplify','root','' );
-    if ($connectionToDatabase->errorCode()) {
-        die("Connection failed: " . $connectionToDatabase->errorCode());
-    }
-
-    $resultOfQuery = $connectionToDatabase->prepare("select * from userDetails");
-    $resultOfQuery->execute();
-    while($row = $resultOfQuery->fetch()){
-        array_push($allUsers, $row);
-    }
-    $resultOfQuery->closeCursor();
+    $db = new CouplifyDB();
+    $utility = new Utility();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -26,38 +20,40 @@
     <div class="view-wrapper">
         <div id="groups" class="navbar-v2-wrapper">
             <div class="container">
-                <div class="groups-grid">
+                <?php
+                    $randomIndexForCuisines = $utility->getRandomIndex(MAX_PAIRS_OF_FILTER_TO_CREATE, count(Utility::$allCuisines));
+                    $randomIndexForHobbies = $utility->getRandomIndex(MAX_PAIRS_OF_FILTER_TO_CREATE, count(Utility::$allHobbies));
+                    $randomIndexForLanguages = $utility->getRandomIndex(MAX_PAIRS_OF_FILTER_TO_CREATE, count(Utility::$allLanguages));
 
-                    <div class="grid-header">
-                        <div class="header-inner">
-                            <h2>All Users</h2>
-                        </div>
-                    </div>
+                    for ($index = 0; $index < MAX_PAIRS_OF_FILTER_TO_CREATE; $index++){
+                        $cuisineIndex = $randomIndexForCuisines[$index];
+                        $hobbyIndex = $randomIndexForHobbies[$index];
+                        $languageIndex = $randomIndexForLanguages[$index];
 
-                    <div class="columns is-multiline">
+                        //Cuisine Preference
+                        $filteredUsers = $db->filterByCuisines(Utility::$allCuisines[$cuisineIndex], MAX_USER_PER_ROW);
+                        if(count($filteredUsers) > 0) {
+                            echo $utility->createFilteredDesignCode("cuisine", Utility::$allCuisines[$cuisineIndex], $filteredUsers);
+                        }
 
-                        <?php
-                           foreach ($allUsers as $user) {
-                                echo '<div class="column is-3">';
-                                echo '<article class="group-box">';
-                                echo '<div class="box-img has-background-image" data-demo-background="'.$user["profilePhoto"].'"></div>';
-                                echo '<a href = "#" class="box-link" >';
-                                echo '<div class="box-img--hover has-background-image" data-demo-background="'.$user["profilePhoto"].'" ></div>';
-                                echo '</a>';
-                                echo '<div class="box-info" >';
-                                echo '<h3 class="box-title">'.$user["lastName"].' '.$user["firstName"].'</h3>';
-                                echo '<span class="box-category">Looking for '.$user["lookingFor"].'</span>';
-                                echo '</div></article></div>';
-                            }
-                        ?>
+                        //Hobbies
+                        $filteredUsers = $db->filterByHobbies(Utility::$allHobbies[$hobbyIndex], MAX_USER_PER_ROW);
+                        if(count($filteredUsers) > 0) {
+                            echo $utility->createFilteredDesignCode("hobby", Utility::$allHobbies[$hobbyIndex], $filteredUsers);
+                        }
 
-                    </div>
-
-                </div>
+                        //Known Languages
+                        $filteredUsers = $db->filterByLanguage(Utility::$allLanguages[$languageIndex], MAX_USER_PER_ROW);
+                        if(count($filteredUsers) > 0) {
+                            echo $utility->createFilteredDesignCode("language", Utility::$allLanguages[$languageIndex], $filteredUsers);
+                        }
+                    }
+                ?>
             </div>
         </div>
     </div>
     <!-- Body design code ends here   -->
+
 </body>
 <?php include_once("./scripts.php"); ?>
 </html>
