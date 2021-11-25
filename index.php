@@ -46,7 +46,7 @@
                                 echo '</a>';
                                 echo '<div class="box-info" >';
                                 echo '<h3 class="box-title">'.$user["lastName"].' '.$user["firstName"].'</h3>';
-                                echo '<span class="box-category">'.$user["aboutMe"].'</span>';
+                                echo '<span class="box-category">Looking for '.$user["lookingFor"].'</span>';
                                 echo '</div></article></div>';
                             }
                         ?>

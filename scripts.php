@@ -31,3 +31,5 @@
 <script src="assets/js/webcam.js"></script>
 <script src="assets/js/compose.js"></script>
 <script src="assets/js/autocompletes.js"></script>
+
+<script src="assets/js/profile.js"></script>
