@@ -1,10 +1,6 @@
 <?php
 
 class Utility{
-    public static array $allHobbies = ["Singing", "Dancing", "Reading", "Cooking", "Gaming", "Painting", "Photography", "Sports", "Yoga", "Workout", "Teaching", "Swimming", "Travelling", "Fishing", "Surfing"];
-    public static array $allLanguages = ["Chinese", "Spanish", "English", "Arabic", "Hindi", "Portuguese", "Russian", "Japanese", "German", "Urdu", "Vietnamese", "French", "Korean", "Italian"];
-    public static array $allCuisines = ["French Cuisine", "Chinese Cuisine", "Japanese Food", "Italian Food", "Greek Food", "Spanish Food", "Lebanese Cuisine", "Moroccan Cuisine", "Mediterranean Cuisine", "Turkish Cuisine", "Thai Cuisine", "Indian Cuisine", "Cajun Food", "Mexican Cuisine", "Caribbean Cuisine", "German Food", "Russian Cuisine", "Hungarian Cuisine", "American Food"];
-    public static array $allIndustries = ["IT Professional", "Doctor", "Lawyer", "Scientist", "Dentist", "Businessperson", "Entrepreneur", "Professor", "Operations Manager", "Truck Driver", "Chef", "Food Server", "Police Officer", "Marketing Specialist", "Registered Nurse", "Electrician", "Carpenter", "Mechanic", "Bookkeeper", "Construction Worker", "Medical Assistant", "Line Supervisor", "Administrative Assistant", "Office Clerk", "Customer Service Representative", "Laborer", "Stocking Associate", "Retail Sales Associate", "Bartender", "Janitor", "Food Preparation Worker", "Cashier"];
 
     public function getUserPhotos($userID): bool|array
     {

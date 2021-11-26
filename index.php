@@ -21,9 +21,9 @@
         <div id="groups" class="navbar-v2-wrapper">
             <div class="container">
                 <?php
-                    $randomIndexForCuisines = $utility->getRandomIndex(MAX_PAIRS_OF_FILTER_TO_CREATE, count(Utility::$allCuisines));
-                    $randomIndexForHobbies = $utility->getRandomIndex(MAX_PAIRS_OF_FILTER_TO_CREATE, count(Utility::$allHobbies));
-                    $randomIndexForLanguages = $utility->getRandomIndex(MAX_PAIRS_OF_FILTER_TO_CREATE, count(Utility::$allLanguages));
+                    $randomIndexForCuisines = $utility->getRandomIndex(MAX_PAIRS_OF_FILTER_TO_CREATE, count($db->getCuisines()));
+                    $randomIndexForHobbies = $utility->getRandomIndex(MAX_PAIRS_OF_FILTER_TO_CREATE, count($db->getHobbies()));
+                    $randomIndexForLanguages = $utility->getRandomIndex(MAX_PAIRS_OF_FILTER_TO_CREATE, count($db->getLanguages()));
 
                     for ($index = 0; $index < MAX_PAIRS_OF_FILTER_TO_CREATE; $index++){
                         $cuisineIndex = $randomIndexForCuisines[$index];
@@ -31,21 +31,21 @@
                         $languageIndex = $randomIndexForLanguages[$index];
 
                         //Cuisine Preference
-                        $filteredUsers = $db->filterByCuisines(Utility::$allCuisines[$cuisineIndex], MAX_USER_PER_ROW);
+                        $filteredUsers = $db->filterByCuisines($db->getCuisines()[$cuisineIndex], MAX_USER_PER_ROW);
                         if(count($filteredUsers) > 0) {
-                            echo $utility->createFilteredDesignCode("cuisine", Utility::$allCuisines[$cuisineIndex], $filteredUsers);
+                            echo $utility->createFilteredDesignCode("cuisine", $db->getCuisines()[$cuisineIndex], $filteredUsers);
                         }
 
                         //Hobbies
-                        $filteredUsers = $db->filterByHobbies(Utility::$allHobbies[$hobbyIndex], MAX_USER_PER_ROW);
+                        $filteredUsers = $db->filterByHobbies($db->getHobbies()[$hobbyIndex], MAX_USER_PER_ROW);
                         if(count($filteredUsers) > 0) {
-                            echo $utility->createFilteredDesignCode("hobby", Utility::$allHobbies[$hobbyIndex], $filteredUsers);
+                            echo $utility->createFilteredDesignCode("hobby", $db->getHobbies()[$hobbyIndex], $filteredUsers);
                         }
 
                         //Known Languages
-                        $filteredUsers = $db->filterByLanguage(Utility::$allLanguages[$languageIndex], MAX_USER_PER_ROW);
+                        $filteredUsers = $db->filterByLanguage($db->getLanguages()[$languageIndex], MAX_USER_PER_ROW);
                         if(count($filteredUsers) > 0) {
-                            echo $utility->createFilteredDesignCode("language", Utility::$allLanguages[$languageIndex], $filteredUsers);
+                            echo $utility->createFilteredDesignCode("language", $db->getLanguages()[$languageIndex], $filteredUsers);
                         }
                     }
                 ?>

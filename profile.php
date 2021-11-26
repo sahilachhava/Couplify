@@ -102,7 +102,7 @@
                                         <div class="flex-block">
                                             <img src="assets/img/custom/work.png" alt="">
                                             <div class="flex-block-meta">
-                                                <span>I am working as <a><?php echo $additionalDetails["workingIndustry"]; ?></a></span>
+                                                <span>I am working as <a><?php echo $userDetails["job"]; ?></a></span>
                                             </div>
                                         </div>
 
@@ -191,8 +191,7 @@
                                                             <div class="block-content">
                                                                 <ul class="interestDetailList">
                                                                     <?php
-                                                                        $hobbies = explode(",", $additionalDetails["hobbies"]);
-                                                                        foreach ($hobbies as $hobby) {
+                                                                        foreach ($additionalDetails["hobbies"] as $hobby) {
                                                                             echo "<li>";
                                                                             echo "<div class='flex-inner'>";
                                                                             echo "<span>".$hobby."</span>";
@@ -212,8 +211,7 @@
                                                             <div class="block-content">
                                                                 <ul class="interestDetailList">
                                                                     <?php
-                                                                        $languages = explode(",", $additionalDetails["knownLanguages"]);
-                                                                        foreach ($languages as $language) {
+                                                                        foreach ($additionalDetails["languages"] as $language) {
                                                                             echo "<li>";
                                                                             echo "<div class='flex-inner'>";
                                                                             echo "<span>".$language."</span>";
@@ -235,37 +233,14 @@
                                                             <div class="block-content">
                                                                 <ul class="interestDetailList">
                                                                     <?php
-                                                                        $cuisinePreferences = explode(",", $additionalDetails["cuisinePreferences"]);
-                                                                        foreach ($cuisinePreferences as $cuisineType) {
+                                                                        foreach ($additionalDetails["cuisines"] as $cuisine) {
                                                                             echo "<li>";
                                                                             echo "<div class='flex-inner'>";
-                                                                            echo "<span>".$cuisineType."</span>";
+                                                                            echo "<span>".$cuisine."</span>";
                                                                             echo "</div>";
                                                                             echo "</li>";
                                                                         }
                                                                     ?>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-
-                                                        <!-- Date of birth -->
-                                                        <div class="about-block">
-                                                            <div class="block-header">
-                                                                <h4>Date of Birth</h4>
-                                                            </div>
-                                                            <div class="block-content">
-                                                                <ul class="interestDetailList">
-                                                                    <li>
-                                                                        <div class="flex-inner">
-                                                                            <span>
-                                                                                <?php
-                                                                                    $age = date_diff(date_create($userDetails["dateOfBirth"]), date_create('today'))->y;
-                                                                                    echo date_format(date_create($userDetails["dateOfBirth"]),"D, jS M Y");
-                                                                                    echo " (".$age.")";
-                                                                                ?>
-                                                                            </span>
-                                                                        </div>
-                                                                    </li>
                                                                 </ul>
                                                             </div>
                                                         </div>
@@ -287,6 +262,11 @@
                                                                     <li>
                                                                         <div class='flex-inner'>
                                                                             <span>Marital Status: <?php echo $userDetails["maritalStatus"] ?></span>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li>
+                                                                        <div class='flex-inner'>
+                                                                            <span>Age: <?php echo date_diff(date_create($userDetails["dateOfBirth"]), date_create('today'))->y; ?></span>
                                                                         </div>
                                                                     </li>
                                                                     <?php
