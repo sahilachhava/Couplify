@@ -90,6 +90,7 @@ $(document).ready(function () {
           }); // Turn the canvas into a Blob (file object without a name)
 
           canvas.toBlob(function (blob) {
+
             // Create a new Dropzone file thumbnail
             myDropzone.createThumbnail(blob, myDropzone.options.thumbnailWidth, myDropzone.options.thumbnailHeight, myDropzone.options.thumbnailMethod, false, function (dataURL) {
               // Update the Dropzone file thumbnail
@@ -102,17 +103,30 @@ $(document).ready(function () {
 
               previewReader.onload = function (event) {
                 // event.target.result contains base64 encoded image
-                $('#upload-preview').attr('src', blob.dataURL); //Show popover
-
-                $('.picture-container').webuiPopover({
-                  title: '',
-                  content: 'Your photo is ready to be uploaded. Hit the "Save Changes" button to complete the upload process.',
-                  animation: 'pop',
-                  width: 300,
-                  style: 'inverse',
-                  placement: 'top',
-                  offsetTop: -16
-                }).trigger('click'); //console.log('THIS IS THE BLOB', blob)
+                var size = blob.size;
+                var sizeMB = size / 1000000;
+                if(sizeMB > 2){
+                  $('.picture-container').webuiPopover({
+                    title: '',
+                    content: 'Please upload photo less than 2MB.',
+                    animation: 'pop',
+                    width: 300,
+                    style: 'inverse',
+                    placement: 'top',
+                    offsetTop: -16
+                  }).trigger('click');
+                }else{
+                  $('#upload-preview').attr('src', blob.dataURL);
+                  $('.picture-container').webuiPopover({
+                    title: '',
+                    content: 'Your photo is ready to upload',
+                    animation: 'pop',
+                    width: 300,
+                    style: 'inverse',
+                    placement: 'top',
+                    offsetTop: -16
+                  }).trigger('click');
+                }
               };
 
               previewReader.readAsDataURL(file);
@@ -155,7 +169,7 @@ $(document).ready(function () {
 
   $('#signup-finish').on('click', function () {
     var $this = $(this);
-    var url = '/navbar-v1-feed.html';
+    var url = '#';
     $this.addClass('is-loading');
     setTimeout(function () {
       window.location = url;

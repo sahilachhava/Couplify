@@ -1,17 +1,20 @@
 <?php
-include_once("CouplifyDB.php");
+    session_start();
+    require_once("controller/CouplifyDB.php");
+    require_once("controller/Utility.php");
+    require_once("model/User.php");
 
-$db = new CouplifyDB();
-$allUsers = $db->getAllUsers();
+    $db = new CouplifyDB();
+    $allUsers = $db->getAllUsers();
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php include_once("./head.php"); ?>
+    <?php include_once("UI/head.php"); ?>
 </head>
 <body>
-<?php include_once("./preloader.php"); ?>
-<?php include_once("./navigation.php"); ?>
+<?php include_once("UI/preloader.php"); ?>
+<?php include_once("UI/navigation.php"); ?>
 
 <!-- Body design code starts here   -->
 <div class="view-wrapper">
@@ -50,5 +53,5 @@ $allUsers = $db->getAllUsers();
 </div>
 <!-- Body design code ends here   -->
 </body>
-<?php include_once("./scripts.php"); ?>
+<?php include_once("UI/scripts.php"); ?>
 </html>

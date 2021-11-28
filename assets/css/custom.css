@@ -1,0 +1,7 @@
+.photo-upload .preview{position:relative;height:120px;width:120px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;border-radius:50%;border:1.4px solid #cecece;margin:0 auto}
+.photo-upload .preview img{display:block;height:100px;width:100px;border-radius:50%}
+.photo-upload .preview .upload-button{position:absolute;top:0;right:0;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:36px;width:36px;border-radius:50%;border:3px solid #fff;background:#cecece;-webkit-transition:all .3s;transition:all .3s}
+.photo-upload .preview .upload-button:hover{background:#3d70b2}
+.photo-upload .preview .upload-button svg{height:14px;width:14px;stroke:#fff;stroke-width:3px}
+.photo-upload .limitation{margin-top:20px;text-align:center}
+.photo-upload .limitation small{color:#999}

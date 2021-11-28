@@ -1,20 +1,29 @@
 <?php
-    include_once("CouplifyDB.php");
-    include_once("Utility.php");
+    session_start();
+    require_once("controller/CouplifyDB.php");
+    require_once("controller/Utility.php");
+    require_once("model/User.php");
+
     const MAX_PAIRS_OF_FILTER_TO_CREATE = 3;
     const MAX_USER_PER_ROW = 4;
 
     $db = new CouplifyDB();
     $utility = new Utility();
+
+    if(isset($_SESSION["userID"])){
+        $userDetails = $db->getUserDetails($_SESSION["userID"]);
+        $additionalDetails = $db->getAdditionalDetails($_SESSION["userID"]);
+        $_SESSION["currentUser"] = serialize(new User($userDetails, $additionalDetails));
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php include_once("./head.php"); ?>
+    <?php include_once("UI/head.php"); ?>
 </head>
 <body>
-    <?php include_once("./preloader.php"); ?>
-    <?php include_once("./navigation.php"); ?>
+    <?php include_once("UI/preloader.php"); ?>
+    <?php include_once("UI/navigation.php"); ?>
 
     <!-- Body design code starts here   -->
     <div class="view-wrapper">
@@ -55,5 +64,5 @@
     <!-- Body design code ends here   -->
 
 </body>
-<?php include_once("./scripts.php"); ?>
+<?php include_once("UI/scripts.php"); ?>
 </html>

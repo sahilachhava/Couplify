@@ -1,6 +1,7 @@
 <?php
-    include_once("CouplifyDB.php");
-    include_once("Utility.php");
+    session_start();
+    require_once("controller/CouplifyDB.php");
+    require_once("controller/Utility.php");
 
     $utility = new Utility();
 
@@ -17,11 +18,13 @@
             header("Location: error404.php");
         }
     }
+
+    unserialize($_SESSION["currentUser"])->getUserPhoto();
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php include_once("./head.php"); ?>
+    <?php include_once("UI/head.php"); ?>
     <style>
         .interestDetailList {
             list-style-type: disc;
@@ -31,8 +34,8 @@
     </style>
 </head>
 <body>
-<?php include_once("./preloader.php"); ?>
-<?php include_once("./navigation.php"); ?>
+<?php include_once("UI/preloader.php"); ?>
+<?php include_once("UI/navigation.php"); ?>
 
 <!-- Body design starts here   -->
 <div class="view-wrapper">
@@ -302,5 +305,5 @@
 <!-- Body design ends here   -->
 
 </body>
-<?php include_once("./scripts.php"); ?>
+<?php include_once("UI/scripts.php"); ?>
 </html>
