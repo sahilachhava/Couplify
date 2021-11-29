@@ -2,14 +2,16 @@
     session_start();
     require_once("controller/CouplifyDB.php");
     require_once("controller/Utility.php");
+    require_once("model/User.php");
 
+    $db = new CouplifyDB();
     $utility = new Utility();
+    $currentUser = null;
 
     $userDetails = [];
     $additionalDetails = [];
     $userAddress = [];
     if(isset($_GET["userID"])){
-        $db = new CouplifyDB();
         if($db->isUserExists($_GET["userID"])){
             $userDetails = $db->getUserDetails($_GET["userID"]);
             $additionalDetails = $db->getAdditionalDetails($_GET["userID"]);
@@ -17,9 +19,13 @@
         }else{
             header("Location: error404.php");
         }
+    }else{
+        header("Location: error404.php");
     }
 
-    unserialize($_SESSION["currentUser"])->getUserPhoto();
+    if(isset($_SESSION["currentUser"])){
+        $currentUser = unserialize($_SESSION["currentUser"]);
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -45,8 +51,11 @@
 
                 <div class="columns is-multiline no-margin">
                     <div class="column is-paddingless">
-                        <div class="avatar">
-                            <img style="border-radius: 50%;margin-left: 420px;height: 200px; width: 200px;" id="user-avatar" class="avatar-image" src="<?php echo $userDetails["profilePhoto"]; ?>" alt="">
+                        <div class="avatar is-hidden-mobile">
+                            <img style="border-radius: 50%;height: 17%; width: 17%;margin-left: 42%;" id="user-avatar" class="avatar-image" src="<?= $userDetails["profilePhoto"]; ?>" alt="">
+                        </div>
+                        <div class="avatar is-hidden-desktop">
+                            <img style="border-radius: 50%;height: 35%; width: 35%;margin-left: 32%;" id="user-avatar" class="avatar-image" src="<?= $userDetails["profilePhoto"]; ?>" alt="">
                         </div>
 
                         <div class="profile-subheader">
@@ -57,12 +66,27 @@
                                     <span>Add to favourites</span>
                                 </a>
                             </div>
-                            <div class="subheader-middle" style="margin-left: -100px;">
+                            <div class="subheader-middle is-hidden-desktop" style="margin-top: -10%;">
+                                <h2><?php echo $userDetails["lastName"]." ".$userDetails["firstName"]; ?></h2>
+                                <span><?php echo $userDetails["gender"]; ?></span>
+                                <a class="button has-icon is-bold is-hidden-desktop" style="margin-top: 10%;">
+                                    <i data-feather="star"></i>
+                                    &nbsp;
+                                    <span>Add to favourites</span>
+                                </a>
+                                <br />
+                                <a href="message.php?userID=<?= $userDetails["userID"] ?>" class="button has-icon is-bold is-hidden-desktop" style="margin-top: 5%; margin-bottom: 5%;">
+                                    <i data-feather="message-circle"></i>
+                                    &nbsp;
+                                    <span>Send Message</span>
+                                </a>
+                            </div>
+                            <div class="subheader-middle is-hidden-mobile">
                                 <h2><?php echo $userDetails["lastName"]." ".$userDetails["firstName"]; ?></h2>
                                 <span><?php echo $userDetails["gender"]; ?></span>
                             </div>
                             <div class="subheader-end is-hidden-mobile">
-                                <a class="button has-icon is-bold">
+                                <a href="message.php?userID=<?= $userDetails["userID"] ?>" class="button has-icon is-bold">
                                     <i data-feather="message-circle"></i>
                                     <span>Send Message</span>
                                 </a>
@@ -156,13 +180,14 @@
                                     <div class="body has-flex-list">
                                         <div class="photo-list">
                                             <?php
-                                                $userPhotos = $utility->getUserPhotos($userDetails["userID"]);
-                                                if($userPhotos){
+                                                $userPhotos = $db->getPhotos($userDetails["userID"]);
+                                                if(count($userPhotos) > 0){
                                                     foreach ($userPhotos as $photo){
+                                                        echo '<a href="assets/photos/'.$userDetails["userID"].'/'.$photo.'" data-fancybox="cl-group-demo" data-thumb="assets/photos/'.$userDetails["userID"].'/'.$photo.'">';
                                                         echo '<div class="photo-wrapper" style="width: 250px;height: 200px;cursor: pointer;">';
                                                         echo '<div class="photo-overlay"></div>';
-                                                        echo '<img src="./assets/photos/'.$userDetails["userID"].'/'.$photo.'" alt="" style="width: 250px;height: 200px;cursor: pointer;">';
-                                                        echo '</div>';
+                                                        echo '<img src="assets/photos/'.$userDetails["userID"].'/'.$photo.'" alt="" style="width: 250px;height: 200px;cursor: pointer;">';
+                                                        echo '</div></a>';
                                                     }
                                                 }else{
                                                     echo '<div class="photo-wrapper">';
@@ -303,7 +328,6 @@
     </div>
 </div>
 <!-- Body design ends here   -->
-
 </body>
 <?php include_once("UI/scripts.php"); ?>
 </html>

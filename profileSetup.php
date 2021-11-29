@@ -148,8 +148,8 @@ if(isset($_POST["saveProfile"])){
                                         <div class="control has-icon">
                                             <select name="gender" class="input is-fade" required>
                                                 <option value=""></option>
-                                                <option value="Male">Male</option>
-                                                <option value="Female">Female</option>
+                                                <option value="Male" <?= (isset($_POST["gender"])) ? ($_POST["gender"] == "Male") ? "selected" : "" : "" ?>>Male</option>
+                                                <option value="Female" <?= (isset($_POST["gender"])) ? ($_POST["gender"] == "Female") ? "selected" : "" : "" ?>>Female</option>
                                             </select>
                                             <div class="form-icon">
                                                 <i data-feather="smile"></i>
@@ -162,9 +162,9 @@ if(isset($_POST["saveProfile"])){
                                         <div class="control has-icon">
                                             <select name="maritalStatus" class="input is-fade" required>
                                                 <option value=""></option>
-                                                <option value="Single">Single</option>
-                                                <option value="Divorced">Divorced</option>
-                                                <option value="Widowed">Widowed</option>
+                                                <option value="Single" <?= (isset($_POST["maritalStatus"])) ? ($_POST["maritalStatus"] == "Single") ? "selected" : "" : "" ?>>Single</option>
+                                                <option value="Divorced" <?= (isset($_POST["maritalStatus"])) ? ($_POST["maritalStatus"] == "Divorced") ? "selected" : "" : "" ?>>Divorced</option>
+                                                <option value="Widowed" <?= (isset($_POST["maritalStatus"])) ? ($_POST["maritalStatus"] == "Widowed") ? "selected" : "" : "" ?>>Widowed</option>
                                             </select>
                                             <div class="form-icon">
                                                 <i data-feather="hash"></i>
@@ -175,7 +175,7 @@ if(isset($_POST["saveProfile"])){
                                     <div class="field field-group">
                                         <label>Total Children</label>
                                         <div class="control has-icon">
-                                            <input type="number" name="children" class="input is-fade" value="0" required>
+                                            <input type="number" name="children" class="input is-fade" value="<?= (isset($_POST["children"])) ? $_POST["children"] : '0' ?>" required>
                                             <div class="form-icon">
                                                 <i data-feather="users"></i>
                                             </div>
@@ -190,8 +190,8 @@ if(isset($_POST["saveProfile"])){
                                         <div class="control has-icon">
                                             <select name="lookingFor" class="input is-fade" required>
                                                 <option value=""></option>
-                                                <option value="Male">Male</option>
-                                                <option value="Female">Female</option>
+                                                <option value="Male" <?= (isset($_POST["lookingFor"])) ? ($_POST["lookingFor"] == "Male") ? "selected" : "" : "" ?>>Male</option>
+                                                <option value="Female" <?= (isset($_POST["lookingFor"])) ? ($_POST["lookingFor"] == "Female") ? "selected" : "" : "" ?>>Female</option>
                                             </select>
                                             <div class="form-icon">
                                                 <i data-feather="smile"></i>
@@ -202,7 +202,7 @@ if(isset($_POST["saveProfile"])){
                                     <div class="field field-group">
                                         <label>Date of Birth</label>
                                         <div class="control has-icon">
-                                            <input type="date" name="dateOfBirth" class="input is-fade removeIcon" required>
+                                            <input type="date" name="dateOfBirth" class="input is-fade removeIcon" value="<?= (isset($_POST["dateOfBirth"])) ? $_POST["dateOfBirth"] : '' ?>" required>
                                             <div class="form-icon">
                                                 <i data-feather="calendar"></i>
                                             </div>
@@ -216,7 +216,11 @@ if(isset($_POST["saveProfile"])){
                                                 <option value=""></option>
                                                 <?php
                                                 foreach ($db->getJobs() as $job){
-                                                    echo '<option value="'.$job.'">'.$job.'</option>';
+                                                    if(isset($_POST["job"]) && $_POST["job"] == $job){
+                                                        echo '<option value="'.$job.'" selected>'.$job.'</option>';
+                                                    }else{
+                                                        echo '<option value="'.$job.'">'.$job.'</option>';
+                                                    }
                                                 }
                                                 ?>
                                             </select>
@@ -232,7 +236,7 @@ if(isset($_POST["saveProfile"])){
                                     <div class="field field-group">
                                         <label>About Me</label>
                                         <div class="control">
-                                            <textarea type="text" class="textarea is-fade" name="aboutMe" rows="3" maxlength="200" placeholder="Tell us about yourself in 200 characters..." required></textarea>
+                                            <textarea type="text" class="textarea is-fade" name="aboutMe" rows="3" maxlength="200" placeholder="Tell us about yourself in 200 characters..." required><?= (isset($_POST["aboutMe"])) ? $_POST["aboutMe"] : '' ?></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -248,7 +252,7 @@ if(isset($_POST["saveProfile"])){
                                     <div class="field field-group">
                                         <label>City</label>
                                         <div class="control has-icon">
-                                            <input type="text" class="input is-fade" name="city" placeholder="City name" value="" required>
+                                            <input type="text" class="input is-fade" name="city" placeholder="City name" value="<?= (isset($_POST["city"])) ? $_POST["city"] : '' ?>" required>
                                             <div class="form-icon">
                                                 <i data-feather="map-pin"></i>
                                             </div>
@@ -261,7 +265,7 @@ if(isset($_POST["saveProfile"])){
                                     <div class="field field-group">
                                         <label>State</label>
                                         <div class="control has-icon">
-                                            <input type="text" class="input is-fade" name="state" maxlength="2" placeholder="Two-Letter Abbreviation" value="" required>
+                                            <input type="text" class="input is-fade" name="state" maxlength="2" placeholder="Two-Letter Abbreviation" value="<?= (isset($_POST["state"])) ? $_POST["state"] : '' ?>" required>
                                             <div class="form-icon">
                                                 <i data-feather="navigation"></i>
                                             </div>
@@ -274,7 +278,7 @@ if(isset($_POST["saveProfile"])){
                                     <div class="field field-group is-autocomplete">
                                         <label>Country</label>
                                         <div class="control has-icon">
-                                            <input id="country-autocpl" type="text" name="country" class="input is-fade" placeholder="Country name" value="" required>
+                                            <input id="country-autocpl" type="text" name="country" class="input is-fade" placeholder="Country name" value="<?= (isset($_POST["country"])) ? $_POST["country"] : '' ?>" required>
                                             <div class="form-icon">
                                                 <i data-feather="globe"></i>
                                             </div>
@@ -298,7 +302,11 @@ if(isset($_POST["saveProfile"])){
                                                 <?php
                                                     $counter = 1;
                                                     foreach ($db->getHobbies() as $hobby){
-                                                        echo '<option value="'.$hobby.'">'.$counter.'. '.$hobby.'</option>';
+                                                        if(isset($_POST["hobbies"]) && $error["hobby"] == "" && in_array($hobby, $_POST["hobbies"])){
+                                                            echo '<option value="'.$hobby.'" selected>'.$counter.'. '.$hobby.'</option>';
+                                                        }else{
+                                                            echo '<option value="'.$hobby.'">'.$counter.'. '.$hobby.'</option>';
+                                                        }
                                                         $counter++;
                                                     }
                                                 ?>
@@ -317,7 +325,11 @@ if(isset($_POST["saveProfile"])){
                                                 <?php
                                                 $counter = 1;
                                                 foreach ($db->getCuisines() as $cuisine){
-                                                    echo '<option value="'.$cuisine.'">'.$counter.'. '.$cuisine.'</option>';
+                                                    if(isset($_POST["cuisines"]) && $error["cuisine"] == "" && in_array($cuisine, $_POST["cuisines"])) {
+                                                        echo '<option value="' . $cuisine . '" selected>' . $counter . '. ' . $cuisine . '</option>';
+                                                    }else{
+                                                        echo '<option value="' . $cuisine . '">' . $counter . '. ' . $cuisine . '</option>';
+                                                    }
                                                     $counter++;
                                                 }
                                                 ?>
@@ -336,7 +348,11 @@ if(isset($_POST["saveProfile"])){
                                                 <?php
                                                 $counter = 1;
                                                 foreach ($db->getLanguages() as $language){
-                                                    echo '<option value="'.$language.'">'.$counter.'. '.$language.'</option>';
+                                                    if(isset($_POST["languages"]) && $error["language"] == "" && in_array($language, $_POST["languages"])) {
+                                                        echo '<option value="' . $language . '" selected>' . $counter . '. ' . $language . '</option>';
+                                                    }else{
+                                                        echo '<option value="' . $language . '">' . $counter . '. ' . $language . '</option>';
+                                                    }
                                                     $counter++;
                                                 }
                                                 ?>

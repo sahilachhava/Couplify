@@ -9,11 +9,12 @@
 
     $db = new CouplifyDB();
     $utility = new Utility();
+    $utility->addUsersToDataFileForSearch($db->getAllUsers());
+    $currentUser = null;
 
     if(isset($_SESSION["userID"])){
-        $userDetails = $db->getUserDetails($_SESSION["userID"]);
-        $additionalDetails = $db->getAdditionalDetails($_SESSION["userID"]);
-        $_SESSION["currentUser"] = serialize(new User($userDetails, $additionalDetails));
+        $utility->setCurrentUser($db);
+        $currentUser = unserialize($_SESSION["currentUser"]);
     }
 ?>
 <!DOCTYPE html>

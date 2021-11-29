@@ -18,15 +18,14 @@
                                     <i data-feather="search"></i>
                                 </span>
 
-<!--                        <div id="tipue_drop_content" class="tipue-drop-content"></div>-->
-                    </div>
-
+                        <div id="tipue_drop_content" class="tipue-drop-content"></div>
                 </div>
             </div>
         </div>
+        </div>
 
         <div class="right">
-            <div id="open-mobile-search" class="navbar-item is-icon">
+            <div id="open-mobile-search" class="navbar-item is-icon is-hidden-desktop">
                 <a class="icon-link is-primary" href="javascript:void(0);">
                     <i data-feather="search"></i>
                 </a>
@@ -76,7 +75,7 @@
                 <div class="user-image">
                     <?php
                         if(isset($_SESSION["userID"])){
-                           echo '<img src='.unserialize($_SESSION["currentUser"])->getUserPhoto().' alt="">';
+                           echo '<img src='.$currentUser->getUserPhoto().' alt="">';
                         }else{
                             echo '<img src="assets/profilePhotos/default.jpg" alt="">';
                         }
@@ -90,7 +89,7 @@
                         <div class="nav-drop-header">
                             <?php
                                 if(isset($_SESSION["userID"])){
-                                    echo '<span class="username">'.unserialize($_SESSION["currentUser"])->getUserFullName().'</span>';
+                                    echo '<span class="username">'.$currentUser->getUserFullName().'</span>';
                                 }else{
                                     echo '<span class="username">Guest User</span>';
                                 }
@@ -112,15 +111,15 @@
                             <?php
                                 if(isset($_SESSION["userID"])){
                             ?>
-                                <a id="profile-link" href="#" class="account-item">
+                                <a id="profile-link" href="myProfile.php" class="account-item">
                                     <div class="media">
                                         <div class="media-left">
                                             <div class="image">
-                                                <img src="<?= unserialize($_SESSION["currentUser"])->getUserPhoto() ?>" alt="">
+                                                <img src="<?= $currentUser->getUserPhoto() ?>" alt="">
                                             </div>
                                         </div>
                                         <div class="media-content">
-                                            <h3><?= unserialize($_SESSION["currentUser"])->getUserFullName() ?></h3>
+                                            <h3><?= $currentUser->getUserFullName() ?></h3>
                                             <small>Manage Profile</small>
                                         </div>
                                         <div class="media-right">
@@ -223,12 +222,13 @@
                     <li>
                         <a href="members.php">Members</a>
                     </li>
-                    <li>
-                        <a href="#">Messages</a>
-                    </li>
-                    <li>
-                        <a href="#">Forums</a>
-                    </li>
+                    <?php
+                        if(isset($_SESSION["userID"])){
+                            echo '<li>
+                                    <a href="myProfile.php">My Profile</a>
+                                  </li>';
+                        }
+                    ?>
                 </ul>
             </div>
         </div>

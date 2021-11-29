@@ -2,16 +2,11 @@
 
 class Utility
 {
-    public function getUserPhotos($userID): bool|array
-    {
-        $photoDirectory = scandir("assets/photos/".$userID."/");
-        if($photoDirectory){
-            $allFilesExcludingHiddenFiles = preg_grep('/^([^.])/', $photoDirectory);
-            $allFilesRemovedExtras = array_diff($allFilesExcludingHiddenFiles, array('..', '.'));
-            return array_values($allFilesRemovedExtras);
-        }else{
-            return $photoDirectory;
-        }
+    public function setCurrentUser($db){
+        $userDetails = $db->getUserDetails($_SESSION["userID"]);
+        $additionalDetails = $db->getAdditionalDetails($_SESSION["userID"]);
+        $userAddress = $db->getUserAddress($_SESSION["userID"]);
+        $_SESSION["currentUser"] = serialize(new User($userDetails, $userAddress, $additionalDetails));
     }
 
     public function getRandomIndex($totalIndex, $maxLength): array
@@ -43,19 +38,42 @@ class Utility
         }
 
         foreach($filteredUsers as $user) {
-            $filterDesign .= '<div class="column is-3">';
-            $filterDesign .= '<article class="group-box">';
-            $filterDesign .= '<div class="box-img has-background-image" data-demo-background="'.$user["profilePhoto"].'"></div>';
-            $filterDesign .= '<a href = "profile.php?userID='.$user["userID"].'" class="box-link" >';
-            $filterDesign .= '<div class="box-img--hover has-background-image" data-demo-background="'.$user["profilePhoto"].'" ></div>';
-            $filterDesign .= '</a>';
-            $filterDesign .= '<div class="box-info" >';
-            $filterDesign .= '<h3 class="box-title">'.$user["lastName"].' '.$user["firstName"].'</h3>';
-            $filterDesign .= '<span class="box-category">Looking for '.$user["lookingFor"].'</span>';
-            $filterDesign .= '</div></article></div>';
+            if($user["userID"] != ((isset($_SESSION["userID"]))? $_SESSION["userID"] : "")) {
+                $filterDesign .= '<div class="column is-3">';
+                $filterDesign .= '<article class="group-box">';
+                $filterDesign .= '<div class="box-img has-background-image" data-demo-background="' . $user["profilePhoto"] . '"></div>';
+                $filterDesign .= '<a href = "profile.php?userID=' . $user["userID"] . '" class="box-link" >';
+                $filterDesign .= '<div class="box-img--hover has-background-image" data-demo-background="' . $user["profilePhoto"] . '" ></div>';
+                $filterDesign .= '</a>';
+                $filterDesign .= '<div class="box-info" >';
+                $filterDesign .= '<h3 class="box-title">' . $user["lastName"] . ' ' . $user["firstName"] . '</h3>';
+                $filterDesign .= '<span class="box-category">Looking for ' . $user["lookingFor"] . '</span>';
+                $filterDesign .= '</div></article></div>';
+            }
         }
         $filterDesign .= '</div></div>';
 
         return $filterDesign;
+    }
+
+    public function addUsersToDataFileForSearch($allUsers){
+        $fileData = 'var tipuedrop = {';
+        $fileData .= '"pages": [';
+
+        foreach ($allUsers as $user){
+            if($user["userID"] != ((isset($_SESSION["userID"]))? $_SESSION["userID"] : "")) {
+                $fileData .= '{
+                "title": "' . $user["lastName"] . ' ' . $user["firstName"] . '",
+                "thumb": "' . $user["profilePhoto"] . '",
+                "text": "<small>Looking for ' . $user["lookingFor"] . '</small>",
+                "url": "profile.php?userID=' . $user["userID"] . '"},';
+            }
+        }
+        $fileData = rtrim($fileData, ", ");
+        $fileData .= ']};';
+
+        $dataFile = fopen("assets/data/tipuedrop_content.js", "w") or die("Unable to open file!");
+        fwrite($dataFile, $fileData);
+        fclose($dataFile);
     }
 }

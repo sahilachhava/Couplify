@@ -92,9 +92,84 @@ class CouplifyDB
         return true;
     }
 
+    public function updateProfile($profile): bool
+    {
+        $queryString = "UPDATE userDetails SET profilePhoto = {$profile['photoPath']}, 
+                       gender = {$profile['gender']}, dateOfBirth = {$profile['dateOfBirth']}, 
+                       aboutMe = {$profile['aboutMe']}, lookingFor = {$profile['lookingFor']}, 
+                       maritalStatus = {$profile['maritalStatus']}, totalChildren = {$profile['children']}, 
+                       job = {$profile['job']} where userID = {$profile['currentUserID']}";
+
+        //UPDATING USER DETAILS
+        $resultOfQuery = $this->connectionToDatabase->prepare($queryString);
+        $queryStatus = $resultOfQuery->execute();
+        echo $queryStatus;
+        if(!$queryStatus){
+            return false;
+        }
+
+        //ADDING ADDRESS OF USER
+        $resultOfQuery = $this->connectionToDatabase->prepare("UPDATE address SET city = ?, state = ?, country = ? where userID = ?");
+        $queryStatus = $resultOfQuery->execute(array($profile['city'], $profile['state'], $profile['country'], $profile['currentUserID']));
+        if(!$queryStatus){
+            return false;
+        }
+
+        //DELETING OLD HOBBIES
+        $resultOfQuery = $this->connectionToDatabase->prepare("DELETE FROM userHobbies where userID = ?");
+        $resultOfQuery->execute(array($profile['currentUserID']));
+
+        //DELETING OLD CUISINES
+        $resultOfQuery = $this->connectionToDatabase->prepare("DELETE FROM userCuisines where userID = ?");
+        $resultOfQuery->execute(array($profile['currentUserID']));
+
+        //DELETING OLD LANGUAGES
+        $resultOfQuery = $this->connectionToDatabase->prepare("DELETE FROM userLanguages where userID = ?");
+        $resultOfQuery->execute(array($profile['currentUserID']));
+
+        //ADDING HOBBIES OF USER
+        foreach ($profile["hobbies"] as $hobby){
+            $resultOfQuery = $this->connectionToDatabase->prepare("INSERT INTO userHobbies(hobby, userID) values(?,?)");
+            $resultOfQuery->execute(array($hobby, $profile['currentUserID']));
+        }
+
+        //ADDING CUISINES OF USER
+        foreach ($profile["cuisines"] as $cuisine){
+            $resultOfQuery = $this->connectionToDatabase->prepare("INSERT INTO userCuisines(cuisine, userID) values(?,?)");
+            $resultOfQuery->execute(array($cuisine, $profile['currentUserID']));
+        }
+
+        //ADDING LANGUAGES OF USER
+        foreach ($profile["languages"] as $language){
+            $resultOfQuery = $this->connectionToDatabase->prepare("INSERT INTO userLanguages(language, userID) values(?,?)");
+            $resultOfQuery->execute(array($language, $profile['currentUserID']));
+        }
+
+        return true;
+    }
+
     public function getLastInsertedID(): string
     {
         return $this->connectionToDatabase->lastInsertId();
+    }
+
+    public function addPhoto($photoName, $userID)
+    {
+        $resultOfQuery = $this->connectionToDatabase->prepare("INSERT INTO userPhotos(photo, userID) values(?,?)");
+        $resultOfQuery->execute(array($photoName, $userID));
+    }
+
+    public function getPhotos($userID): array
+    {
+        $allPhotos = [];
+
+        $resultOfQuery = $this->connectionToDatabase->prepare("select * from userPhotos where userID = {$userID}");
+        $resultOfQuery->execute();
+        while($row = $resultOfQuery->fetch()){
+            array_push($allPhotos, $row['photo']);
+        }
+
+        return $allPhotos;
     }
 
     public function getAllUsers(): array
@@ -233,6 +308,42 @@ class CouplifyDB
         }else{
             return false;
         }
+    }
+
+    public function sendMessage($senderID, $receiverID, $message)
+    {
+        date_default_timezone_set('UTC');
+        $currentDate = date('Y-m-d H:i:s');
+        $resultOfQuery = $this->connectionToDatabase->prepare("insert into messages(senderID, receiverID, message, timeStamp) values(?,?,?,?)");
+        $resultOfQuery->execute(array($senderID, $receiverID, $message, $currentDate));
+    }
+
+    public function getMessages($senderID, $receiverID): array
+    {
+        $allMessages = [];
+
+        $searchQuery = "select * from messages where 
+        (senderID = {$senderID} or senderID = {$receiverID}) 
+        and 
+        (receiverID = {$receiverID} or receiverID = {$senderID})";
+        
+        $resultOfQuery = $this->connectionToDatabase->prepare($searchQuery);
+        $resultOfQuery->execute();
+        while($row = $resultOfQuery->fetch()){
+            array_push($allMessages, $row);
+        }
+
+        return  $allMessages;
+    }
+
+    public function deleteMessages($senderID, $receiverID)
+    {
+        $searchQuery = "delete from messages where 
+        (senderID = {$senderID} or senderID = {$receiverID}) 
+        and 
+        (receiverID = {$receiverID} or receiverID = {$senderID})";
+        $resultOfQuery = $this->connectionToDatabase->prepare($searchQuery);
+        $resultOfQuery->execute();
     }
 
     public function filterByCuisines($cuisineName, $maxUserLimit): array

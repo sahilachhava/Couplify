@@ -2,16 +2,22 @@
 session_start();
 require_once("controller/CouplifyDB.php");
 require_once("controller/Utility.php");
-
+$db = new CouplifyDB();
 $statusFlag = "";
 if(isset($_POST['validateLogin'])){
-    $db = new CouplifyDB();
-    $currentUser = $db->validateLogin($_POST["userEmail"], $_POST["userPassword"]);
-    if($currentUser != -1){
-        $_SESSION["userID"] = $currentUser;
+    $currentUserID = $db->validateLogin($_POST["userEmail"], $_POST["userPassword"]);
+    if($currentUserID != -1){
+        $_SESSION["userID"] = $currentUserID;
         header("Location: index.php");
     }else{
         $statusFlag = "Invalid email or password, Please try valid credentials!";
+    }
+}
+if(isset($_SESSION["userID"])){
+    if($db->isUserExists($_SESSION["userID"])){
+        header("Location: index.php");
+    }else{
+        unset($_SESSION["userID"]);
     }
 }
 ?>

@@ -6,6 +6,11 @@
 
     $db = new CouplifyDB();
     $allUsers = $db->getAllUsers();
+    $currentUser = null;
+
+    if(isset($_SESSION["currentUser"])){
+        $currentUser = unserialize($_SESSION["currentUser"]);
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,16 +37,18 @@
 
                     <?php
                     foreach ($allUsers as $user) {
-                        echo '<div class="column is-3">';
-                        echo '<article class="group-box">';
-                        echo '<div class="box-img has-background-image" data-demo-background="'.$user["profilePhoto"].'"></div>';
-                        echo '<a href = "profile.php?userID='.$user["userID"].'" class="box-link" >';
-                        echo '<div class="box-img--hover has-background-image" data-demo-background="'.$user["profilePhoto"].'" ></div>';
-                        echo '</a>';
-                        echo '<div class="box-info" >';
-                        echo '<h3 class="box-title">'.$user["lastName"].' '.$user["firstName"].'</h3>';
-                        echo '<span class="box-category">Looking for '.$user["lookingFor"].'</span>';
-                        echo '</div></article></div>';
+                        if($user["userID"] != ((isset($_SESSION["userID"]))? $_SESSION["userID"] : "")) {
+                            echo '<div class="column is-3">';
+                            echo '<article class="group-box">';
+                            echo '<div class="box-img has-background-image" data-demo-background="' . $user["profilePhoto"] . '"></div>';
+                            echo '<a href = "profile.php?userID=' . $user["userID"] . '" class="box-link" >';
+                            echo '<div class="box-img--hover has-background-image" data-demo-background="' . $user["profilePhoto"] . '" ></div>';
+                            echo '</a>';
+                            echo '<div class="box-info" >';
+                            echo '<h3 class="box-title">' . $user["lastName"] . ' ' . $user["firstName"] . '</h3>';
+                            echo '<span class="box-category">Looking for ' . $user["lookingFor"] . '</span>';
+                            echo '</div></article></div>';
+                        }
                     }
                     ?>
 

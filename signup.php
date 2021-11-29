@@ -2,10 +2,10 @@
 session_start();
 require_once("controller/CouplifyDB.php");
 require_once("controller/Utility.php");
+$db = new CouplifyDB();
 
 $statusFlag = "";
 if(isset($_POST["saveDetails"])){
-    $db = new CouplifyDB();
     $basicUserDetails = array($_POST["enteredEmail"], md5($_POST["enteredPassword"]), $_POST["firstName"], $_POST["lastName"]);
     $queryFlag = $db->registerNewUser($basicUserDetails);
     if($queryFlag){
@@ -13,6 +13,13 @@ if(isset($_POST["saveDetails"])){
         header("Location: profileSetup.php");
     }else{
         $statusFlag = "Something went wrong! Try again later";
+    }
+}
+if(isset($_SESSION["userID"])){
+    if($db->isUserExists($_SESSION["userID"])){
+        header("Location: index.php");
+    }else{
+        unset($_SESSION["userID"]);
     }
 }
 ?>

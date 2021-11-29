@@ -5,11 +5,12 @@ class User
     private int $userID;
     private string $firstName, $lastName, $userFullName, $dateOfBirth, $gender, $userEmail,
         $userPhoto, $aboutMe, $lookingFor, $maritalStatus, $totalChildren, $job;
+    private array $userAddress;
     private array $userHobbies;
     private array $userCuisines;
     private array $userLanguages;
 
-    public function __construct($userData, $additionalDetails)
+    public function __construct($userData, $userAddress, $additionalDetails)
     {
         $this->userID = $userData["userID"];
         $this->firstName = $userData["firstName"];
@@ -24,6 +25,7 @@ class User
         $this->maritalStatus = $userData["maritalStatus"];
         $this->totalChildren = $userData["totalChildren"];
         $this->job = $userData["job"];
+        $this->userAddress = $userAddress;
         $this->userHobbies = $additionalDetails["hobbies"];
         $this->userCuisines = $additionalDetails["cuisines"];
         $this->userLanguages = $additionalDetails["languages"];
@@ -152,6 +154,16 @@ class User
     public function setJob($job): void
     {
         $this->job = $job;
+    }
+
+    public function getUserAddress(): array
+    {
+        return $this->userAddress;
+    }
+
+    public function setUserAddress(array $userAddress): void
+    {
+        $this->userAddress = $userAddress;
     }
 
     public function getUserHobbies(): array
