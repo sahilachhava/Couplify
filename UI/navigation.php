@@ -31,6 +31,9 @@
                 </a>
             </div>
 
+            <?php
+                if(isset($_SESSION["userID"])){
+            ?>
             <div class="navbar-item is-icon drop-trigger">
                 <a class="icon-link" href="javascript:void(0);">
                     <i data-feather="bell"></i>
@@ -70,6 +73,9 @@
                     </div>
                 </div>
             </div>
+            <?php
+                }
+            ?>
 
             <div id="account-dropdown" class="navbar-item is-account drop-trigger has-caret">
                 <div class="user-image">
@@ -130,7 +136,7 @@
                             <?php
                                 }else{
                             ?>
-                                <a id="profile-link" href="login.php" class="account-item">
+                                <a id="profile-link" class="account-item">
                                     <div class="media">
                                         <div class="media-left">
                                             <div class="image">
@@ -149,18 +155,23 @@
                                 }
                             ?>
                             <hr class="account-divider">
-                            <a href="options-settings.html" class="account-item">
-                                <div class="media">
-                                    <div class="icon-wrap">
-                                        <i data-feather="settings"></i>
-                                    </div>
-                                    <div class="media-content">
-                                        <h3>Settings</h3>
-                                        <small>Manage your account</small>
-                                    </div>
-                                </div>
-                            </a>
                             <?php
+                            if(isset($_SESSION["userID"])){
+                            ?>
+                                <a href="options-settings.html" class="account-item">
+                                    <div class="media">
+                                        <div class="icon-wrap">
+                                            <i data-feather="settings"></i>
+                                        </div>
+                                        <div class="media-content">
+                                            <h3>Settings</h3>
+                                            <small>Manage your account</small>
+                                        </div>
+                                    </div>
+                                </a>
+                            <?php
+                                }
+
                                 if(isset($_SESSION["userID"])){
                             ?>
                                 <a href="logout.php" class="account-item">
@@ -224,6 +235,12 @@
                     </li>
                     <?php
                         if(isset($_SESSION["userID"])){
+                            echo '<li>
+                                    <a href="myChats.php">Messages</a>
+                                  </li>';
+                            echo '<li>
+                                    <a href="favourites.php">My Favourites</a>
+                                  </li>';
                             echo '<li>
                                     <a href="myProfile.php">My Profile</a>
                                   </li>';

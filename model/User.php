@@ -9,8 +9,9 @@ class User
     private array $userHobbies;
     private array $userCuisines;
     private array $userLanguages;
+    private array $favouritedUsers;
 
-    public function __construct($userData, $userAddress, $additionalDetails)
+    public function __construct($userData, $userAddress, $additionalDetails, $favouritedUsers)
     {
         $this->userID = $userData["userID"];
         $this->firstName = $userData["firstName"];
@@ -29,6 +30,7 @@ class User
         $this->userHobbies = $additionalDetails["hobbies"];
         $this->userCuisines = $additionalDetails["cuisines"];
         $this->userLanguages = $additionalDetails["languages"];
+        $this->favouritedUsers = $favouritedUsers;
     }
 
     public function getUserID()
@@ -194,5 +196,15 @@ class User
     public function setUserLanguages($userLanguages): void
     {
         $this->userLanguages = $userLanguages;
+    }
+
+    public function getFavouritedUsers(): array
+    {
+        return $this->favouritedUsers;
+    }
+
+    public function setFavouritedUsers(array $favouritedUsers): void
+    {
+        $this->favouritedUsers = $favouritedUsers;
     }
 }

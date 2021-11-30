@@ -21,6 +21,9 @@
         if($db->isUserExists($_GET["userID"])){
             $userDetails = $db->getUserDetails($_GET["userID"]);
             $allMessages = $db->getMessages($currentUser->getUserID(), $userDetails["userID"]);
+
+            //Set Read Ticks
+            $db->readMessages($currentUser->getUserID(), $userDetails["userID"]);
         }else{
             header("Location: error404.php");
         }
@@ -36,6 +39,15 @@
         }else{
             $error = "Please enter message first!";
         }
+    }
+
+    if(isset($_POST["sendWink"])){
+        $db->sendMessage($currentUser->getUserID(), $userDetails["userID"], "wink");
+        $allMessages = $db->getMessages($currentUser->getUserID(), $userDetails["userID"]);
+    }
+    if(isset($_POST["deleteAll"])){
+        $db->deleteMessages($currentUser->getUserID(), $userDetails["userID"]);
+        $allMessages = $db->getMessages($currentUser->getUserID(), $userDetails["userID"]);
     }
 ?>
 <!DOCTYPE html>
@@ -105,27 +117,16 @@
                     }
                 ?>
 
-
                 <?php
+                    $divIDCount = 1;
                     foreach ($allMessages as $message){
                         $messageTime = date_format(date_create($message["timeStamp"]),"d-m-Y H:i");
                         if($message["senderID"] == $userDetails["userID"]){
-                            echo '<div class="chat-message is-received">
-                            <img src="'.$userDetails["profilePhoto"].'" alt="">
-                            <div class="message-block">
-                                <span>'.$messageTime.'</span>
-                                <div class="message-text">'.$message["message"].'</div>
-                            </div>
-                            </div>';
+                            echo $utility->createMessageDesignCode($userDetails["profilePhoto"], $messageTime, $message["message"], "received", $divIDCount,$message["isRead"] );
                         }else{
-                            echo '<div class="chat-message is-sent">
-                            <img src="'.$userDetails["profilePhoto"].'" alt="">
-                            <div class="message-block">
-                                <span>'.$messageTime.'</span>
-                                <div class="message-text">'.$message["message"].'</div>
-                            </div>
-                            </div>';
+                            echo $utility->createMessageDesignCode($currentUser->getUserPhoto(), $messageTime, $message["message"], "sent", $divIDCount, $message["isRead"]);
                         }
+                        $divIDCount++;
                     }
                 ?>
             </div>
@@ -187,6 +188,19 @@
                                 </div>
                                 <div class="dropdown-menu" role="menu">
                                     <div class="dropdown-content">
+                                        <form method="post" action="message.php?userID=<?= $userDetails['userID']; ?>" hidden>
+                                            <button type="submit" name="sendWink" id="sendWink" hidden></button>
+                                        </form>
+                                        <a onclick="document.getElementById('sendWink').click();" class="dropdown-item">
+                                            <div class="media">
+                                                <i data-feather="eye"></i>
+                                                <div class="media-content">
+                                                    <h3>Send wink</h3>
+                                                    <small>Send wink to user.</small>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <hr class="dropdown-divider">
                                         <a href="profile.php?userID=<?= $userDetails["userID"]; ?>" class="dropdown-item">
                                             <div class="media">
                                                 <i data-feather="user"></i>
@@ -197,7 +211,10 @@
                                             </div>
                                         </a>
                                         <hr class="dropdown-divider">
-                                        <a href="<?= $db->deleteMessages($currentUser->getUserID(), $userDetails['userID']); ?>" class="dropdown-item">
+                                        <form method="post" action="message.php?userID=<?= $userDetails['userID']; ?>" hidden>
+                                            <button type="submit" name="deleteAll" id="deleteAll" hidden></button>
+                                        </form>
+                                        <a onclick="document.getElementById('deleteAll').click();" class="dropdown-item">
                                             <div class="media">
                                                 <i data-feather="trash-2"></i>
                                                 <div class="media-content">
@@ -213,8 +230,8 @@
 
                         <div class="details-avatar">
                             <img src="<?= $userDetails["profilePhoto"] ?>" alt="">
-                            <div class="call-me">
-                                <i class="mdi mdi-facebook-messenger"></i>
+                            <div class="call-me" style="background-color: black;">
+                                <i class="mdi mdi-emoticon-wink"></i>
                             </div>
                         </div>
 
@@ -247,7 +264,6 @@
         </div>
     </div>
 </div>
-
 <!-- Body design ends here   -->
 </body>
 <?php include_once("UI/scripts.php"); ?>

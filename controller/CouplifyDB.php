@@ -338,12 +338,85 @@ class CouplifyDB
 
     public function deleteMessages($senderID, $receiverID)
     {
-        $searchQuery = "delete from messages where 
+        $deleteQuery = "delete from messages where 
         (senderID = {$senderID} or senderID = {$receiverID}) 
         and 
         (receiverID = {$receiverID} or receiverID = {$senderID})";
+
+        $resultOfQuery = $this->connectionToDatabase->prepare($deleteQuery);
+        $resultOfQuery->execute();
+    }
+
+    public function readMessages($currentUserID, $senderID)
+    {
+        $updateQuery = "update messages set isRead = 1 where (receiverID = {$currentUserID} and senderID = {$senderID}) and isRead = 0";
+        $resultOfQuery = $this->connectionToDatabase->prepare($updateQuery);
+        $resultOfQuery->execute();
+    }
+
+    public function getUnreadMessages($currentUserID, $senderID): int
+    {
+        $unreadCount = 0;
+        $searchQuery = "select * from messages where (receiverID = {$currentUserID} and senderID = {$senderID}) and isRead = 0";
         $resultOfQuery = $this->connectionToDatabase->prepare($searchQuery);
         $resultOfQuery->execute();
+        while($row = $resultOfQuery->fetch()){
+            $unreadCount++;
+        }
+        return $unreadCount;
+    }
+
+    public function getAllMessages($currentUserID): array
+    {
+        $allUsers = [];
+        $allUserIDs = [];
+        $searchQuery = "select * from messages where senderID = {$currentUserID} or receiverID = {$currentUserID}";
+        $resultOfQuery = $this->connectionToDatabase->prepare($searchQuery);
+        $resultOfQuery->execute();
+        while($row = $resultOfQuery->fetch()){
+            if($row["senderID"] == $currentUserID){
+                array_push($allUserIDs, $row["receiverID"]);
+            }else{
+                array_push($allUserIDs, $row["senderID"]);
+            }
+        }
+
+        //Removing Duplicates //DISTINCT was not used because it will not get me my desire result
+        $allUserIDs = array_unique($allUserIDs);
+
+        foreach ($allUserIDs as $userID){
+            $user = $this->getUserDetails($userID);
+            $user["unreadCount"] = $this->getUnreadMessages($currentUserID, $userID);
+            array_push($allUsers, $user);
+        }
+
+        return $allUsers;
+    }
+
+    public function addToFavourite($userID, $favouritedUserID)
+    {
+        $resultOfQuery = $this->connectionToDatabase->prepare("insert into favourites(userID, favouritedUserID) value({$userID}, {$favouritedUserID})");
+        $resultOfQuery->execute();
+    }
+
+    public function removeFromFavourite($userID, $favouritedUserID)
+    {
+        $resultOfQuery = $this->connectionToDatabase->prepare("delete from favourites where userID = {$userID} and favouritedUserID = {$favouritedUserID}");
+        $resultOfQuery->execute();
+    }
+
+    public function getMyFavourites($userID): array
+    {
+        $favouritedUsers = [];
+
+        $resultOfQuery = $this->connectionToDatabase->prepare("select * from favourites where userID = {$userID}");
+        $resultOfQuery->execute();
+        while($row = $resultOfQuery->fetch()) {
+            $user = $this->getUserDetails($row["favouritedUserID"]);
+            array_push($favouritedUsers, $user);
+        }
+
+        return $favouritedUsers;
     }
 
     public function filterByCuisines($cuisineName, $maxUserLimit): array

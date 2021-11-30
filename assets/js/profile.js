@@ -319,14 +319,17 @@ $(document).ready(function () {
     //Vertical tabs
     $('.left-menu .menu-item').on('click', function () {
       var targetContent = $(this).attr('data-content');
-      $('.left-menu .menu-item').removeClass('is-active');
-      $(this).addClass('is-active');
-      $('.content-section').removeClass('is-active');
-      $('#' + targetContent).addClass('is-active');
+      if(targetContent != "innocent-wink") {
+        $('.left-menu .menu-item').removeClass('is-active');
+        $('.left-menu .winks').addClass('is-active');
+        $(this).addClass('is-active');
+        $('.content-section').removeClass('is-active');
+        $('#' + targetContent).addClass('is-active');
 
-      if (targetContent == 'education-content' || targetContent == 'job-content') {
-        //Init Glider
-        initAboutGlider();
+        if (targetContent == 'education-content' || targetContent == 'job-content') {
+          //Init Glider
+          initAboutGlider();
+        }
       }
     }); //Mini like button
 
