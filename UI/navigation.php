@@ -49,26 +49,26 @@
                             </a>
                         </div>
                         <div class="nav-drop-body is-notifications">
-                            <!-- Notification -->
-                            <div class="media">
-                                <figure class="media-left">
-                                    <p class="image">
-                                        <img src="assets/img/avatars/bob.png" alt="">
-                                    </p>
-                                </figure>
-                                <div class="media-content">
-                                    <span><a href="#">Yamcha</a> sent a <a href="#">new message</a>.</span>
-                                    <span class="time">5 minutes ago</span>
-                                </div>
-                                <div class="media-right">
-                                    <div class="added-icon">
-                                        <i data-feather="message-square"></i>
-                                    </div>
-                                </div>
-                            </div>
+
+                        <?php
+                            $allNotifications = $db->getNotifications($currentUser->getUserID());
+                            foreach($allNotifications as $notification){
+                                $user = $db->getUserDetails($notification["userID"]);
+                                echo $utility->notificationDesignCode($notification, $user, $currentUser);
+                            }
+
+                            if(count($allNotifications) < 1){
+                                echo '<div class="media"><div class="media-content"><span><h3 style="text-align: center">No new notifications</h3></span></div></div>';
+                            }
+
+                            if(isset($_GET["deleteNotifications"])){
+                                $db->deleteNotifications($currentUser->getUserID());
+                            }
+                        ?>
+
                         </div>
                         <div class="nav-drop-footer">
-                            <a href="#">View All</a>
+                            <a href="<?= basename($_SERVER['PHP_SELF'])."?deleteNotifications" ?>">Delete all</a>
                         </div>
                     </div>
                 </div>

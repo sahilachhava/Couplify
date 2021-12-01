@@ -1,34 +1,34 @@
 <?php
-session_start();
-require_once("controller/CouplifyDB.php");
-require_once("controller/Utility.php");
-require_once("model/User.php");
-$db = new CouplifyDB();
-$utility = new Utility();
+    session_start();
+    require_once("controller/CouplifyDB.php");
+    require_once("controller/Utility.php");
+    require_once("model/User.php");
+    $db = new CouplifyDB();
+    $utility = new Utility();
 
-if(!isset($_SESSION["userID"])){
-    header("Location: login.php");
-}
-$currentUser = unserialize($_SESSION["currentUser"]);
+    if(!isset($_SESSION["userID"])){
+        header("Location: login.php");
+    }
+    $currentUser = unserialize($_SESSION["currentUser"]);
 
-$error = "";
-if(isset($_FILES["uploadPhoto"])){
-    if($_FILES["uploadPhoto"]["size"] > 2097152){
-        $error = "Sorry your uploaded file is too large. (Limit < 2MB)";
-    }else{
-        if (!file_exists("assets/photos/".$currentUser->getUserID())) {
-            mkdir("assets/photos/".$currentUser->getUserID(), 0777, true);
-        }
-
-        $fileNameWithExtension = $_FILES["uploadPhoto"]["name"];
-        $pathToStore = "assets/photos/" . $currentUser->getUserID() ."/". $fileNameWithExtension;
-        if(!move_uploaded_file($_FILES["uploadPhoto"]["tmp_name"], $pathToStore)){
-            $error = "File Not Uploaded Successfully";
+    $error = "";
+    if(isset($_FILES["uploadPhoto"])){
+        if($_FILES["uploadPhoto"]["size"] > 2097152){
+            $error = "Sorry your uploaded file is too large. (Limit < 2MB)";
         }else{
-            $db->addPhoto($fileNameWithExtension, $currentUser->getUserID());
+            if (!file_exists("assets/photos/".$currentUser->getUserID())) {
+                mkdir("assets/photos/".$currentUser->getUserID(), 0777, true);
+            }
+
+            $fileNameWithExtension = $_FILES["uploadPhoto"]["name"];
+            $pathToStore = "assets/photos/" . $currentUser->getUserID() ."/". $fileNameWithExtension;
+            if(!move_uploaded_file($_FILES["uploadPhoto"]["tmp_name"], $pathToStore)){
+                $error = "File Not Uploaded Successfully";
+            }else{
+                $db->addPhoto($fileNameWithExtension, $currentUser->getUserID());
+            }
         }
     }
-}
 ?>
     <!DOCTYPE html>
     <html lang="en">

@@ -1,27 +1,28 @@
 <?php
-session_start();
-require_once("controller/CouplifyDB.php");
-require_once("controller/Utility.php");
-$db = new CouplifyDB();
+    session_start();
+    require_once("controller/CouplifyDB.php");
+    require_once("controller/Utility.php");
+    $db = new CouplifyDB();
+    $utility = new Utility();
 
-$statusFlag = "";
-if(isset($_POST["saveDetails"])){
-    $basicUserDetails = array($_POST["enteredEmail"], md5($_POST["enteredPassword"]), $_POST["firstName"], $_POST["lastName"]);
-    $queryFlag = $db->registerNewUser($basicUserDetails);
-    if($queryFlag){
-        setcookie("tempUserID", $db->getLastInsertedID(), strtotime("+1 month"), "/");
-        header("Location: profileSetup.php");
-    }else{
-        $statusFlag = "Something went wrong! Try again later";
+    $statusFlag = "";
+    if(isset($_POST["saveDetails"])){
+        $basicUserDetails = array($_POST["enteredEmail"], md5($_POST["enteredPassword"]), $_POST["firstName"], $_POST["lastName"]);
+        $queryFlag = $db->registerNewUser($basicUserDetails);
+        if($queryFlag){
+            setcookie("tempUserID", $db->getLastInsertedID(), strtotime("+1 month"), "/");
+            header("Location: profileSetup.php");
+        }else{
+            $statusFlag = "Something went wrong! Try again later";
+        }
     }
-}
-if(isset($_SESSION["userID"])){
-    if($db->isUserExists($_SESSION["userID"])){
-        header("Location: index.php");
-    }else{
-        unset($_SESSION["userID"]);
+    if(isset($_SESSION["userID"])){
+        if($db->isUserExists($_SESSION["userID"])){
+            header("Location: index.php");
+        }else{
+            unset($_SESSION["userID"]);
+        }
     }
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">

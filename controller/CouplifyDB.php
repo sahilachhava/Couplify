@@ -310,6 +310,35 @@ class CouplifyDB
         }
     }
 
+    public function sendNotification($userID, $receiverID, $notificationType){
+        date_default_timezone_set('UTC');
+        $timeStamp = date('Y-m-d H:i:s');
+        $resultOfQuery = $this->connectionToDatabase->prepare("insert into notifications(userID, receiverID, type, timeStamp) values(?,?,?,?)");
+        $resultOfQuery->execute(array($userID, $receiverID, $notificationType, $timeStamp));
+    }
+
+    public function getNotifications($currentUserID): array
+    {
+        $allNotifications = [];
+
+        $resultOfQuery = $this->connectionToDatabase->prepare("select * from notifications where receiverID = {$currentUserID} order by timeStamp desc");
+        $resultOfQuery->execute();
+        while($row = $resultOfQuery->fetch()){
+            array_push($allNotifications, $row);
+        }
+
+        return $allNotifications;
+    }
+
+    public function deleteNotifications($currentUserID): bool
+    {
+        $resultOfQuery = $this->connectionToDatabase->prepare("delete from notifications where receiverID = {$currentUserID}");
+        if($resultOfQuery->execute()){
+            return true;
+        }
+        return false;
+    }
+
     public function addToPremium($userID, $planType)
     {
         date_default_timezone_set('UTC');
@@ -335,7 +364,14 @@ class CouplifyDB
         date_default_timezone_set('UTC');
         $currentDate = date('Y-m-d H:i:s');
         $resultOfQuery = $this->connectionToDatabase->prepare("insert into messages(senderID, receiverID, message, timeStamp) values(?,?,?,?)");
-        $resultOfQuery->execute(array($senderID, $receiverID, $message, $currentDate));
+        $queryResult = $resultOfQuery->execute(array($senderID, $receiverID, $message, $currentDate));
+        if($queryResult){
+            if($message == "wink"){
+                $this->sendNotification($senderID, $receiverID, "wink");
+            }else{
+                $this->sendNotification($senderID, $receiverID, "message");
+            }
+        }
     }
 
     public function getMessages($senderID, $receiverID): array
@@ -416,13 +452,19 @@ class CouplifyDB
     public function addToFavourite($userID, $favouritedUserID)
     {
         $resultOfQuery = $this->connectionToDatabase->prepare("insert into favourites(userID, favouritedUserID) value({$userID}, {$favouritedUserID})");
-        $resultOfQuery->execute();
+        $queryResult = $resultOfQuery->execute();
+        if($queryResult){
+            $this->sendNotification($userID, $favouritedUserID, "addfavourite");
+        }
     }
 
-    public function removeFromFavourite($userID, $favouritedUserID)
+    public function removeFromFavourite($userID, $unFavouritedUserID)
     {
-        $resultOfQuery = $this->connectionToDatabase->prepare("delete from favourites where userID = {$userID} and favouritedUserID = {$favouritedUserID}");
-        $resultOfQuery->execute();
+        $resultOfQuery = $this->connectionToDatabase->prepare("delete from favourites where userID = {$userID} and favouritedUserID = {$unFavouritedUserID}");
+        $queryResult = $resultOfQuery->execute();
+        if($queryResult){
+            $this->sendNotification($userID, $unFavouritedUserID, "removefavourite");
+        }
     }
 
     public function getMyFavourites($userID): array

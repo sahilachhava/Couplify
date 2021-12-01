@@ -46,11 +46,10 @@ class Utility
                 $filterDesign .= '<div class="box-img has-background-image" data-demo-background="' . $user["profilePhoto"] . '"></div>';
                 $filterDesign .= '<a href = "profile.php?userID=' . $user["userID"] . '" class="box-link" >';
                 $filterDesign .= '<div class="box-img--hover has-background-image" data-demo-background="' . $user["profilePhoto"] . '" ></div>';
-                $filterDesign .= '</a>';
                 $filterDesign .= '<div class="box-info" >';
                 $filterDesign .= '<h3 class="box-title">' . $user["lastName"] . ' ' . $user["firstName"] . '</h3>';
                 $filterDesign .= '<span class="box-category">Looking for ' . $user["lookingFor"] . '</span>';
-                $filterDesign .= '</div></article></div>';
+                $filterDesign .= '</div></a></article></div>';
             }
         }
         $filterDesign .= '</div></div>';
@@ -140,5 +139,45 @@ class Utility
 
         $favouriteDesign .= '</div>';
         return $favouriteDesign;
+    }
+
+    public function notificationDesignCode($notification, $user, $currentUser): string
+    {
+        $type = $notification["type"];
+        $messageTime = date_format(date_create($notification["timeStamp"]),"d-m-Y H:i");
+        $icon = "";
+        $notificationDesign = '';
+        $notificationDesign .= '<div class="media"><figure class="media-left">';
+        $notificationDesign .= '<p class="image"><img src="'.$user["profilePhoto"].'" alt=""></p></figure>';
+        $notificationDesign .= '<div class="media-content"><span>';
+
+        if($type == "message"){
+            $notificationDesign .= '<a href="profile.php?userID='.$user["userID"].'">'.$user["firstName"].'</a> sent you a <a href="message.php?userID='.$user["userID"].'">new message.</a>';
+            $icon = "message-square";
+        }else if($type == "wink"){
+            $notificationDesign .= '<a href="profile.php?userID='.$user["userID"].'">'.$user["firstName"].'</a> sent you a <a href="message.php?userID='.$user["userID"].'">wink.</a>';
+            $icon = "eye";
+        }else if($type == "addfavourite"){
+            $notificationDesign .= '<a href="profile.php?userID='.$user["userID"].'">'.$user["firstName"].'</a> added you in favourites.';
+            $icon = "star";
+
+            if(!$currentUser->isPremium()){
+                return "";
+            }
+        }
+        else if($type == "removefavourite"){
+            $notificationDesign .= '<a href="profile.php?userID='.$user["userID"].'">'.$user["firstName"].'</a> removed you from favourites.</a>';
+            $icon = "x-circle";
+
+            if(!$currentUser->isPremium()){
+                return "";
+            }
+        }
+
+        $notificationDesign .= '</span> <span class="time">'.$messageTime.'</span>';
+        $notificationDesign .= '</div><div class="media-right"><div class="added-icon">';
+        $notificationDesign .= '<i data-feather="'.$icon.'"></i></div></div></div>';
+
+        return $notificationDesign;
     }
 }

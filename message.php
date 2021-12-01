@@ -87,8 +87,8 @@
 
         <!-- Chat sidebar -->
         <div id="chat-sidebar" class="users-sidebar">
-            <a href="index.php" class="header-item">
-                <img src="assets/img/logo.png" alt="">
+            <a href="myChats.php" class="header-item">
+                <i data-feather="arrow-left-circle" style="width: 60%; height: 60%;color: #7f8c8d;margin-top: 2%"></i>
             </a>
             <div class="footer-item">
                 <a href="message.php?userID=<?= $userDetails["userID"] ?>">

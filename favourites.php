@@ -1,19 +1,19 @@
 <?php
-session_start();
-require_once("controller/CouplifyDB.php");
-require_once("controller/Utility.php");
-require_once("model/User.php");
+    session_start();
+    require_once("controller/CouplifyDB.php");
+    require_once("controller/Utility.php");
+    require_once("model/User.php");
 
-$db = new CouplifyDB();
-$utility = new Utility();
-$currentUser = null;
+    $db = new CouplifyDB();
+    $utility = new Utility();
+    $currentUser = null;
 
-if(isset($_SESSION["userID"])){
-    $utility->setCurrentUser($db);
-    $currentUser = unserialize($_SESSION["currentUser"]);
-}else{
-    header("Location: login.php");
-}
+    if(isset($_SESSION["userID"])){
+        $utility->setCurrentUser($db);
+        $currentUser = unserialize($_SESSION["currentUser"]);
+    }else{
+        header("Location: login.php");
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,14 +27,20 @@ if(isset($_SESSION["userID"])){
 <div class="view-wrapper">
     <div id="friends-page" class="friends-wrapper main-container">
         <div class="card-row-wrap is-active" style="margin-top: 5%;">
-            <div class="card-row-placeholder">
-                <span class="light-image" style="color: black;">No favorited members found.</span>
-                <span class="dark-image" style="color: white;">No favorited members found.</span>
-            </div>
+            <?php
+                $allMyFavourites = $db->getMyFavourites($currentUser->getUserID());
+                if(count($allMyFavourites) < 1){
+            ?>
+                <div class="card-row-placeholder">
+                    <span class="light-image" style="color: black;">No favorited members found.</span>
+                    <span class="dark-image" style="color: white;">No favorited members found.</span>
+                </div>
+            <?php
+                }
+            ?>
             <div class="card-row">
 
                 <?php
-                    $allMyFavourites = $db->getMyFavourites($currentUser->getUserID());
                     foreach ($allMyFavourites as $user){
                         echo $utility->myFavouritesDesignCode($user);
                     }

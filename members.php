@@ -5,6 +5,7 @@
     require_once("model/User.php");
 
     $db = new CouplifyDB();
+    $utility = new Utility();
     $allUsers = $db->getAllUsers();
     $currentUser = null;
 
@@ -43,11 +44,10 @@
                             echo '<div class="box-img has-background-image" data-demo-background="' . $user["profilePhoto"] . '"></div>';
                             echo '<a href = "profile.php?userID=' . $user["userID"] . '" class="box-link" >';
                             echo '<div class="box-img--hover has-background-image" data-demo-background="' . $user["profilePhoto"] . '" ></div>';
-                            echo '</a>';
                             echo '<div class="box-info" >';
                             echo '<h3 class="box-title">' . $user["lastName"] . ' ' . $user["firstName"] . '</h3>';
                             echo '<span class="box-category">Looking for ' . $user["lookingFor"] . '</span>';
-                            echo '</div></article></div>';
+                            echo '</div></a></article></div>';
                         }
                     }
                     ?>

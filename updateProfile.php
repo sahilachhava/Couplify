@@ -1,72 +1,72 @@
 <?php
-session_start();
-require_once("controller/CouplifyDB.php");
-require_once("controller/Utility.php");
-require_once("model/User.php");
-$db = new CouplifyDB();
-$utility = new Utility();
+    session_start();
+    require_once("controller/CouplifyDB.php");
+    require_once("controller/Utility.php");
+    require_once("model/User.php");
+    $db = new CouplifyDB();
+    $utility = new Utility();
 
-$error = array("photo" => "", "hobby" => "", "cuisine" => "", "language" => "");
-if(!isset($_SESSION["userID"])){
-    header("Location: login.php");
-}
-$currentUser = unserialize($_SESSION["currentUser"]);
+    $error = array("photo" => "", "hobby" => "", "cuisine" => "", "language" => "");
+    if(!isset($_SESSION["userID"])){
+        header("Location: login.php");
+    }
+    $currentUser = unserialize($_SESSION["currentUser"]);
 
-if(isset($_POST["updateProfile"])){
-    $isPhotoUpdated = true;
-    $pathToStore = $currentUser->getUserPhoto();
-    if($_FILES["profilePhoto"]["name"] != ""){
-        if($_FILES["profilePhoto"]["size"] > 2097152){
-            $error["photo"] = "Sorry your uploaded file is too large. (Limit < 2MB)";
-            $isPhotoUpdated = false;
-        }else{
-            $fileNameWithExtension = $_FILES["profilePhoto"]["name"];
-            $fileExtension = "." . pathinfo($fileNameWithExtension, PATHINFO_EXTENSION);
-            $pathToStore = "assets/profilePhotos/" . $currentUser->getUserID() . $fileExtension;
-            if(!move_uploaded_file($_FILES["profilePhoto"]["tmp_name"], $pathToStore)){
-                $error["photo"] = "File Not Uploaded Successfully";
+    if(isset($_POST["updateProfile"])){
+        $isPhotoUpdated = true;
+        $pathToStore = $currentUser->getUserPhoto();
+        if($_FILES["profilePhoto"]["name"] != ""){
+            if($_FILES["profilePhoto"]["size"] > 2097152){
+                $error["photo"] = "Sorry your uploaded file is too large. (Limit < 2MB)";
                 $isPhotoUpdated = false;
             }else{
-                $isPhotoUpdated = true;
+                $fileNameWithExtension = $_FILES["profilePhoto"]["name"];
+                $fileExtension = "." . pathinfo($fileNameWithExtension, PATHINFO_EXTENSION);
+                $pathToStore = "assets/profilePhotos/" . $currentUser->getUserID() . $fileExtension;
+                if(!move_uploaded_file($_FILES["profilePhoto"]["tmp_name"], $pathToStore)){
+                    $error["photo"] = "File Not Uploaded Successfully";
+                    $isPhotoUpdated = false;
+                }else{
+                    $isPhotoUpdated = true;
+                }
             }
         }
-    }
-    if($isPhotoUpdated){
-        if(count($_POST["hobbies"]) > 5 || count($_POST["hobbies"]) == 0){
-            $error["hobby"] = "Please select minimum 1 or maximum 5 hobbies";
-        }else if(count($_POST["cuisines"]) > 5 || count($_POST["cuisines"]) == 0){
-            $error["cuisine"] = "Please select minimum 1 or maximum 5 cuisines";
-        }else if(count($_POST["languages"]) > 5 || count($_POST["languages"]) == 0){
-            $error["language"] = "Please select minimum 1 or maximum 5 languages";
-        }else{
-            $dateOfBirth = date_format(date_create($_POST["dateOfBirth"]),"Y-m-d");
-            $profileDetails = array(
-                "photoPath" => "'".$pathToStore."'",
-                "gender" => "'".$_POST["gender"]."'",
-                "maritalStatus" => "'".$_POST["maritalStatus"]."'",
-                "children" => $_POST["children"],
-                "lookingFor" => "'".$_POST["lookingFor"]."'",
-                "dateOfBirth" => "'".$dateOfBirth."'",
-                "job" => "'".$_POST["job"]."'",
-                "aboutMe" => "'".$_POST["aboutMe"]."'",
-                "city" => $_POST["city"],
-                "state" => $_POST["state"],
-                "country" => $_POST["country"],
-                "hobbies" => $_POST["hobbies"],
-                "languages" => $_POST["languages"],
-                "cuisines" => $_POST["cuisines"],
-                "currentUserID" => $currentUser->getUserID()
-            );
-
-            if($db->updateProfile($profileDetails)){
-                $utility->setCurrentUser($db);
-                header("Location: myProfile.php");
+        if($isPhotoUpdated){
+            if(count($_POST["hobbies"]) > 5 || count($_POST["hobbies"]) == 0){
+                $error["hobby"] = "Please select minimum 1 or maximum 5 hobbies";
+            }else if(count($_POST["cuisines"]) > 5 || count($_POST["cuisines"]) == 0){
+                $error["cuisine"] = "Please select minimum 1 or maximum 5 cuisines";
+            }else if(count($_POST["languages"]) > 5 || count($_POST["languages"]) == 0){
+                $error["language"] = "Please select minimum 1 or maximum 5 languages";
             }else{
-                $error["photo"] = "Something went wrong, Please try again later!";
+                $dateOfBirth = date_format(date_create($_POST["dateOfBirth"]),"Y-m-d");
+                $profileDetails = array(
+                    "photoPath" => "'".$pathToStore."'",
+                    "gender" => "'".$_POST["gender"]."'",
+                    "maritalStatus" => "'".$_POST["maritalStatus"]."'",
+                    "children" => $_POST["children"],
+                    "lookingFor" => "'".$_POST["lookingFor"]."'",
+                    "dateOfBirth" => "'".$dateOfBirth."'",
+                    "job" => "'".$_POST["job"]."'",
+                    "aboutMe" => "'".$_POST["aboutMe"]."'",
+                    "city" => $_POST["city"],
+                    "state" => $_POST["state"],
+                    "country" => $_POST["country"],
+                    "hobbies" => $_POST["hobbies"],
+                    "languages" => $_POST["languages"],
+                    "cuisines" => $_POST["cuisines"],
+                    "currentUserID" => $currentUser->getUserID()
+                );
+
+                if($db->updateProfile($profileDetails)){
+                    $utility->setCurrentUser($db);
+                    header("Location: myProfile.php");
+                }else{
+                    $error["photo"] = "Something went wrong, Please try again later!";
+                }
             }
         }
     }
-}
 ?>
     <!DOCTYPE html>
     <html lang="en">
