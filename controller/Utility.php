@@ -7,7 +7,8 @@ class Utility
         $additionalDetails = $db->getAdditionalDetails($_SESSION["userID"]);
         $userAddress = $db->getUserAddress($_SESSION["userID"]);
         $favouritedUsers = $db->getMyFavourites($_SESSION["userID"]);
-        $_SESSION["currentUser"] = serialize(new User($userDetails, $userAddress, $additionalDetails, $favouritedUsers));
+        $premiumInfo = $db->getPremiumDetails($_SESSION["userID"]);
+        $_SESSION["currentUser"] = serialize(new User($userDetails, $userAddress, $additionalDetails, $favouritedUsers, $premiumInfo));
     }
 
     public function getRandomIndex($totalIndex, $maxLength): array
@@ -79,9 +80,8 @@ class Utility
         fclose($dataFile);
     }
 
-    public function createMessageDesignCode($profilePhoto, $time, $msg, $type, $divIDCount, $isRead): string
+    public function createMessageDesignCode($profilePhoto, $time, $msg, $type, $divIDCount, $isRead, $isPremium): string
     {
-        $messageDeign = "";
         if($type == "received"){
             $messageDeign = '<div class="chat-message is-received">';
         }else{
@@ -105,7 +105,7 @@ class Utility
             $messageDeign .= '</div>';
         }
 
-        if($isRead && $type == "sent"){
+        if($isRead && $type == "sent" && $isPremium){
             $messageDeign .= '<span class="readReceipts"><i style="width: 15px; height: 15px;" data-feather="check-circle"></i></span>';
         }
 

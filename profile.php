@@ -84,19 +84,21 @@
                         <div class="profile-subheader">
                             <div class="subheader-end is-hidden-mobile" style="text-align: left;">
                                 <?php
-                                    if(isset($_SESSION["userID"])){
-                                        if(in_array($userDetails, $currentUser->getFavouritedUsers())){
+                                    if($currentUser->isPremium()){
+                                        if(isset($_SESSION["userID"])){
+                                            if(in_array($userDetails, $currentUser->getFavouritedUsers())){
                                 ?>
-                                    <a onclick="document.getElementById('removeFromFavourite').click();" class="button has-icon is-bold">
-                                        <i data-feather="x-circle"></i>&nbsp;<span>Remove from favourites</span>
-                                    </a>
+                                        <a onclick="document.getElementById('removeFromFavourite').click();" class="button has-icon is-bold">
+                                            <i data-feather="x-circle"></i>&nbsp;<span>Remove from favourites</span>
+                                        </a>
                                 <?php
-                                    }else{
+                                        }else{
                                 ?>
                                     <a onclick="document.getElementById('addToFavourite').click();" class="button has-icon is-bold">
                                         <i data-feather="star"></i>&nbsp;<span>Add to favourites</span>
                                     </a>
                                 <?php
+                                            }
                                         }
                                     }
                                 ?>
@@ -105,19 +107,21 @@
                                 <h2><?php echo $userDetails["lastName"]." ".$userDetails["firstName"]; ?></h2>
                                 <span><?php echo $userDetails["gender"]; ?></span>
                                 <?php
-                                    if(isset($_SESSION["userID"])){
-                                        if(in_array($userDetails, $currentUser->getFavouritedUsers())){
+                                if(isset($_SESSION["userID"])){
+                                    if($currentUser->isPremium()){
+                                            if(in_array($userDetails, $currentUser->getFavouritedUsers())){
                                 ?>
-                                    <a onclick="document.getElementById('removeFromFavourite').click();" class="button has-icon is-bold is-hidden-desktop" style="margin-top: 10%;">
-                                        <i data-feather="x-circle"></i>&nbsp;<span>Remove from favourites</span>
-                                    </a>
+                                        <a onclick="document.getElementById('removeFromFavourite').click();" class="button has-icon is-bold is-hidden-desktop" style="margin-top: 10%;">
+                                            <i data-feather="x-circle"></i>&nbsp;<span>Remove from favourites</span>
+                                        </a>
                                 <?php
-                                    }else{
+                                        }else{
                                 ?>
-                                    <a onclick="document.getElementById('addToFavourite').click();" class="button has-icon is-bold is-hidden-desktop" style="margin-top: 10%;">
-                                        <i data-feather="star"></i>&nbsp;<span>Add to favourites</span>
-                                    </a>
+                                        <a onclick="document.getElementById('addToFavourite').click();" class="button has-icon is-bold is-hidden-desktop" style="margin-top: 10%;">
+                                            <i data-feather="star"></i>&nbsp;<span>Add to favourites</span>
+                                        </a>
                                 <?php
+                                        }
                                     }
                                 ?>
                                     <br />

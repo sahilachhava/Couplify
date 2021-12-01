@@ -158,7 +158,7 @@
                             <?php
                             if(isset($_SESSION["userID"])){
                             ?>
-                                <a href="options-settings.html" class="account-item">
+                                <a href="#" class="account-item">
                                     <div class="media">
                                         <div class="icon-wrap">
                                             <i data-feather="settings"></i>
@@ -169,11 +169,24 @@
                                         </div>
                                     </div>
                                 </a>
-                            <?php
-                                }
+                                <?php
+                                    if(!$currentUser->isPremium()){
+                                ?>
+                                    <a href="upgrade.php" class="account-item">
+                                        <div class="media">
+                                            <div class="icon-wrap">
+                                                <i data-feather="key"></i>
+                                            </div>
+                                            <div class="media-content">
+                                                <h3>Unlock Premium</h3>
+                                                <small>Upgrade your account</small>
+                                            </div>
+                                        </div>
+                                    </a>
+                                <?php
+                                    }
+                                ?>
 
-                                if(isset($_SESSION["userID"])){
-                            ?>
                                 <a href="logout.php" class="account-item">
                                     <div class="media">
                                         <div class="icon-wrap">
@@ -238,9 +251,11 @@
                             echo '<li>
                                     <a href="myChats.php">Messages</a>
                                   </li>';
-                            echo '<li>
+                            if($currentUser->isPremium()) {
+                                echo '<li>
                                     <a href="favourites.php">My Favourites</a>
                                   </li>';
+                            }
                             echo '<li>
                                     <a href="myProfile.php">My Profile</a>
                                   </li>';

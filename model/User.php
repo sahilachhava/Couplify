@@ -5,13 +5,15 @@ class User
     private int $userID;
     private string $firstName, $lastName, $userFullName, $dateOfBirth, $gender, $userEmail,
         $userPhoto, $aboutMe, $lookingFor, $maritalStatus, $totalChildren, $job;
+    private bool $isPremium;
     private array $userAddress;
     private array $userHobbies;
     private array $userCuisines;
     private array $userLanguages;
     private array $favouritedUsers;
+    private array $premiumInfo;
 
-    public function __construct($userData, $userAddress, $additionalDetails, $favouritedUsers)
+    public function __construct($userData, $userAddress, $additionalDetails, $favouritedUsers, $premiumInfo)
     {
         $this->userID = $userData["userID"];
         $this->firstName = $userData["firstName"];
@@ -31,6 +33,12 @@ class User
         $this->userCuisines = $additionalDetails["cuisines"];
         $this->userLanguages = $additionalDetails["languages"];
         $this->favouritedUsers = $favouritedUsers;
+        if($premiumInfo){
+            $this->premiumInfo = $premiumInfo;
+            $this->isPremium = true;
+        }else{
+            $this->isPremium = $premiumInfo;
+        }
     }
 
     public function getUserID()
@@ -206,5 +214,25 @@ class User
     public function setFavouritedUsers(array $favouritedUsers): void
     {
         $this->favouritedUsers = $favouritedUsers;
+    }
+
+    public function isPremium(): bool
+    {
+        return $this->isPremium;
+    }
+
+    public function setIsPremium(bool $isPremium): void
+    {
+        $this->isPremium = $isPremium;
+    }
+
+    public function getPremiumInfo(): array
+    {
+        return $this->premiumInfo;
+    }
+
+    public function setPremiumInfo(array $premiumInfo): void
+    {
+        $this->premiumInfo = $premiumInfo;
     }
 }

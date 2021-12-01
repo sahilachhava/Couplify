@@ -33,3 +33,4 @@
 <script src="assets/js/autocompletes.js"></script>
 
 <script src="assets/js/profile.js"></script>
+<script src="assets/js/shop.js"></script>

@@ -31,6 +31,10 @@ function initSpinner(price) {
 }
 
 $(document).ready(function () {
+  if($("#paymentText").val() != ""){
+    $("#summaryContainer, #confirmation-container, #premiumFeatures, #checkout-section-1").toggleClass("is-hidden");
+  }
+
   if ($("#shop-page").length) {
     //Tabs
     $(".store-tabs .tab-control").on("click", function () {
@@ -267,13 +271,13 @@ $(document).ready(function () {
       });
     }); //Submit Payment
 
-    $(".is-button .buttons").on("click", function () {
-      var $this = $(this);
-      $("#payment-button").addClass("is-loading");
-      setTimeout(function () {
-        $("#payment-button").removeClass("is-loading");
-        $("#payment-container, #confirmation-container, .header-actions .button").toggleClass("is-hidden");
-      }, 2000);
-    });
+    // $(".is-button .buttons").on("click", function () {
+    //   var $this = $(this);
+    //   $("#payment-button").addClass("is-loading");
+    //   setTimeout(function () {
+    //     $("#payment-button").removeClass("is-loading");
+    //     $("#payment-container, #confirmation-container, .header-actions .button").toggleClass("is-hidden");
+    //   }, 2000);
+    // });
   }
 });

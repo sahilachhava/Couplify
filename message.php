@@ -122,9 +122,9 @@
                     foreach ($allMessages as $message){
                         $messageTime = date_format(date_create($message["timeStamp"]),"d-m-Y H:i");
                         if($message["senderID"] == $userDetails["userID"]){
-                            echo $utility->createMessageDesignCode($userDetails["profilePhoto"], $messageTime, $message["message"], "received", $divIDCount,$message["isRead"] );
+                            echo $utility->createMessageDesignCode($userDetails["profilePhoto"], $messageTime, $message["message"], "received", $divIDCount,$message["isRead"] , $currentUser->isPremium());
                         }else{
-                            echo $utility->createMessageDesignCode($currentUser->getUserPhoto(), $messageTime, $message["message"], "sent", $divIDCount, $message["isRead"]);
+                            echo $utility->createMessageDesignCode($currentUser->getUserPhoto(), $messageTime, $message["message"], "sent", $divIDCount, $message["isRead"], $currentUser->isPremium());
                         }
                         $divIDCount++;
                     }

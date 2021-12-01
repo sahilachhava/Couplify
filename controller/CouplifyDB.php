@@ -310,6 +310,26 @@ class CouplifyDB
         }
     }
 
+    public function addToPremium($userID, $planType)
+    {
+        date_default_timezone_set('UTC');
+        $startDate = date('Y-m-d H:i:s');
+        if($planType == "weekly"){
+            $endDate = date('Y-m-d H:i:s', strtotime("+7 day", strtotime($startDate)));
+        }else{
+            $endDate = date('Y-m-d H:i:s', strtotime("+30 day", strtotime($startDate)));
+        }
+        $resultOfQuery = $this->connectionToDatabase->prepare("insert into premiumPlan(userID, startDate, endDate, planType) values(?,?,?,?)");
+        $resultOfQuery->execute(array($userID, $startDate, $endDate, $planType));
+    }
+
+    public function getPremiumDetails($userID): array|bool
+    {
+        $resultOfQuery = $this->connectionToDatabase->prepare("select * from premiumPlan where userID = {$userID}");
+        $resultOfQuery->execute();
+        return $resultOfQuery->fetch();
+    }
+
     public function sendMessage($senderID, $receiverID, $message)
     {
         date_default_timezone_set('UTC');

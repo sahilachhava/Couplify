@@ -27,8 +27,9 @@
 <div class="view-wrapper">
     <div id="friends-page" class="friends-wrapper main-container">
         <div class="card-row-wrap is-active" style="margin-top: 5%;">
-            <div class="card-row-placeholder is-hidden">
-                No chats found.
+            <div class="card-row-placeholder">
+                <span class="light-image" style="color: black;">No chats found.</span>
+                <span class="dark-image" style="color: white;">No chats found.</span>
             </div>
             <div class="card-row">
 
