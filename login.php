@@ -57,8 +57,8 @@
             <div class="columns is-vcentered">
                 <div class="column is-6 image-column">
                     <!--Illustration-->
-                    <img class="light-image login-image" src="assets/img/illustrations/login/login.svg" alt="">
-                    <img class="dark-image login-image" src="assets/img/illustrations/login/login-dark.svg" alt="">
+                    <img class="light-image login-image" src="assets/img/custom/login.svg" alt="">
+                    <img class="dark-image login-image" src="assets/img/custom/login-dark.svg" alt="">
                 </div>
 
                 <div class="column is-6">

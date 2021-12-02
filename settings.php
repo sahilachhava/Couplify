@@ -215,7 +215,7 @@
                     </form>
 
                     <div class="illustration">
-                        <img src="assets/img/illustrations/settings/2.svg" alt="">
+                        <img src="assets/img/custom/2.svg" alt="">
                         <p>If you'd like to change your current password, you can do that from here.</p>
                     </div>
                 </div>

@@ -96,7 +96,7 @@ class Utility
             $messageDeign .= '<div class="message-text" id="'.$divIDCount.'">';
             echo '<script type="text/javascript"> 
                     var image = new Image();
-                    image.src = "assets/img/wink.gif";
+                    image.src = "assets/img/custom/wink.gif";
                     image.onload = function() {
                         document.getElementById("'.$divIDCount.'").appendChild(image.cloneNode(true));
                     } 

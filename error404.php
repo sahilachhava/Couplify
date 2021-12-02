@@ -11,8 +11,8 @@
     <div class="error-wrapper">
         <div class="error-inner has-text-centered">
             <div class="bg-number dark-inverted">404</div>
-            <img class="light-image" src="assets/img/illustrations/placeholders/3.svg" alt="" />
-            <img class="dark-image" src="assets/img/illustrations/placeholders/3.svg" alt="" />
+            <img class="light-image" src="assets/img/custom/3.svg" alt="" />
+            <img class="dark-image" src="assets/img/custom/3.svg" alt="" />
             <h3 class="dark-inverted">We couldn't find that page</h3>
             <p>Please try again or contact an administrator if the problem persists.</p>
             <div class="button-wrap">
