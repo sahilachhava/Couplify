@@ -31,31 +31,73 @@
         <div id="groups" class="navbar-v2-wrapper">
             <div class="container">
                 <?php
-                    $randomIndexForCuisines = $utility->getRandomIndex(MAX_PAIRS_OF_FILTER_TO_CREATE, count($db->getCuisines()));
-                    $randomIndexForHobbies = $utility->getRandomIndex(MAX_PAIRS_OF_FILTER_TO_CREATE, count($db->getHobbies()));
-                    $randomIndexForLanguages = $utility->getRandomIndex(MAX_PAIRS_OF_FILTER_TO_CREATE, count($db->getLanguages()));
+                    $allCuisines = []; $allHobbies = []; $allLanguages = [];
+                    $randomIndexForCuisines = []; $randomIndexForHobbies = []; $randomIndexForLanguages = [];
 
-                    for ($index = 0; $index < MAX_PAIRS_OF_FILTER_TO_CREATE; $index++){
-                        $cuisineIndex = $randomIndexForCuisines[$index];
-                        $hobbyIndex = $randomIndexForHobbies[$index];
-                        $languageIndex = $randomIndexForLanguages[$index];
+                    if(isset($_SESSION["userID"])) {
+                        $allCuisines = $currentUser->getUserCuisines();
+                        $allHobbies = $currentUser->getUserHobbies();
+                        $allLanguages = $currentUser->getUserLanguages();
 
-                        //Cuisine Preference
-                        $filteredUsers = $db->filterByCuisines($db->getCuisines()[$cuisineIndex], MAX_USER_PER_ROW);
-                        if(count($filteredUsers) > 0) {
-                            echo $utility->createFilteredDesignCode("cuisine", $db->getCuisines()[$cuisineIndex], $filteredUsers);
+                        shuffle($allCuisines);
+                        $shuffledCuisines  = array_slice($allCuisines, 0, MAX_PAIRS_OF_FILTER_TO_CREATE);
+
+                        shuffle($allHobbies);
+                        $shuffledHobbies  = array_slice($allHobbies, 0, MAX_PAIRS_OF_FILTER_TO_CREATE);
+
+                        shuffle($allLanguages);
+                        $shuffledLanguages  = array_slice($allLanguages, 0, MAX_PAIRS_OF_FILTER_TO_CREATE);
+
+                        for ($index = 0; $index < MAX_PAIRS_OF_FILTER_TO_CREATE; $index++){
+                            //Cuisine Preference
+                            $filteredUsers = $db->filterByCuisines($shuffledCuisines[$index], MAX_USER_PER_ROW);
+                            if(count($filteredUsers) > 0) {
+                                echo $utility->createFilteredDesignCode("cuisine", $shuffledCuisines[$index], $filteredUsers);
+                            }
+
+                            //Hobbies
+                            $filteredUsers = $db->filterByHobbies($shuffledHobbies[$index], MAX_USER_PER_ROW);
+                            if(count($filteredUsers) > 0) {
+                                echo $utility->createFilteredDesignCode("hobby", $shuffledHobbies[$index], $filteredUsers);
+                            }
+
+                            //Known Languages
+                            $filteredUsers = $db->filterByLanguage($shuffledLanguages[$index], MAX_USER_PER_ROW);
+                            if(count($filteredUsers) > 0) {
+                                echo $utility->createFilteredDesignCode("language", $shuffledLanguages[$index], $filteredUsers);
+                            }
                         }
+                    }else{
+                        $allCuisines = $db->getCuisines();
+                        $allHobbies = $db->getHobbies();
+                        $allLanguages = $db->getLanguages();
 
-                        //Hobbies
-                        $filteredUsers = $db->filterByHobbies($db->getHobbies()[$hobbyIndex], MAX_USER_PER_ROW);
-                        if(count($filteredUsers) > 0) {
-                            echo $utility->createFilteredDesignCode("hobby", $db->getHobbies()[$hobbyIndex], $filteredUsers);
-                        }
+                        $randomIndexForCuisines = $utility->getRandomIndex(MAX_PAIRS_OF_FILTER_TO_CREATE, count($allCuisines));
+                        $randomIndexForHobbies = $utility->getRandomIndex(MAX_PAIRS_OF_FILTER_TO_CREATE, count($allHobbies));
+                        $randomIndexForLanguages = $utility->getRandomIndex(MAX_PAIRS_OF_FILTER_TO_CREATE, count($allLanguages));
 
-                        //Known Languages
-                        $filteredUsers = $db->filterByLanguage($db->getLanguages()[$languageIndex], MAX_USER_PER_ROW);
-                        if(count($filteredUsers) > 0) {
-                            echo $utility->createFilteredDesignCode("language", $db->getLanguages()[$languageIndex], $filteredUsers);
+                        for ($index = 0; $index < MAX_PAIRS_OF_FILTER_TO_CREATE; $index++){
+                            $cuisineIndex = $randomIndexForCuisines[$index];
+                            $hobbyIndex = $randomIndexForHobbies[$index];
+                            $languageIndex = $randomIndexForLanguages[$index];
+
+                            //Cuisine Preference
+                            $filteredUsers = $db->filterByCuisines($allCuisines[$cuisineIndex], MAX_USER_PER_ROW);
+                            if(count($filteredUsers) > 0) {
+                                echo $utility->createFilteredDesignCode("cuisine", $allCuisines[$cuisineIndex], $filteredUsers);
+                            }
+
+                            //Hobbies
+                            $filteredUsers = $db->filterByHobbies($allHobbies[$hobbyIndex], MAX_USER_PER_ROW);
+                            if(count($filteredUsers) > 0) {
+                                echo $utility->createFilteredDesignCode("hobby", $allHobbies[$hobbyIndex], $filteredUsers);
+                            }
+
+                            //Known Languages
+                            $filteredUsers = $db->filterByLanguage($allLanguages[$languageIndex], MAX_USER_PER_ROW);
+                            if(count($filteredUsers) > 0) {
+                                echo $utility->createFilteredDesignCode("language", $allLanguages[$languageIndex], $filteredUsers);
+                            }
                         }
                     }
                 ?>
