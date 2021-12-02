@@ -33,7 +33,7 @@
     <!DOCTYPE html>
     <html lang="en">
     <head>
-        <?php include_once("UI/head.php"); ?>
+        <?php include_once("commonUI/head.php"); ?>
         <style>
             .interestDetailList {
                 list-style-type: disc;
@@ -49,8 +49,8 @@
         </style>
     </head>
     <body>
-    <?php include_once("UI/preloader.php"); ?>
-    <?php include_once("UI/navigation.php"); ?>
+    <?php include_once("commonUI/preloader.php"); ?>
+    <?php include_once("commonUI/navigation.php"); ?>
 
     <!-- Body design starts here   -->
     <div class="view-wrapper">
@@ -322,5 +322,5 @@
     <!-- Body design ends here   -->
 
     </body>
-<?php include_once("UI/scripts.php"); ?>
+<?php include_once("commonUI/scripts.php"); ?>
     </html>

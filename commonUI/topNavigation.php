@@ -186,7 +186,7 @@
                             }
                             ?>
 
-                            <a href="logout.php" class="account-item">
+                            <a href="commonUI/logout.php" class="account-item">
                                 <div class="media">
                                     <div class="icon-wrap">
                                         <i data-feather="power"></i>

@@ -63,7 +63,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php include_once("UI/head.php"); ?>
+    <?php include_once("commonUI/head.php"); ?>
     <style>
         .interestsSelect option {
             font-variant: all-petite-caps;
@@ -96,7 +96,7 @@
     </style>
 </head>
 <body>
-<?php include_once("UI/preloader.php"); ?>
+<?php include_once("commonUI/preloader.php"); ?>
 <!-- Body design starts here   -->
 <!--navigation-->
 <div class="signup-wrapper">
@@ -401,7 +401,7 @@
         </div>
     </div>
 </body>
-<?php include_once("UI/scripts.php"); ?>
+<?php include_once("commonUI/scripts.php"); ?>
 <script>
     $("#profilePhoto").change(function (){
         if (this.files && this.files[0]) {

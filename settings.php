@@ -77,7 +77,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php include_once("UI/head.php"); ?>
+    <?php include_once("commonUI/head.php"); ?>
     <style>
         .errorMessage {
             margin-left: 2%;
@@ -87,9 +87,9 @@
     </style>
 </head>
 <body>
-<?php include_once("UI/preloader.php"); ?>
+<?php include_once("commonUI/preloader.php"); ?>
 <div class="navbar-v2">
-    <?php include_once("UI/topNavigation.php"); ?>
+    <?php include_once("commonUI/topNavigation.php"); ?>
 </div>
 <!-- Body design starts here   -->
 <div class="view-wrapper is-full">
@@ -345,5 +345,5 @@
 </div>
 <!-- Body design ends here   -->
 </body>
-<?php include_once("UI/scripts.php"); ?>
+<?php include_once("commonUI/scripts.php"); ?>
 </html>

@@ -27,7 +27,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php include_once("UI/head.php"); ?>
+    <?php include_once("commonUI/head.php"); ?>
     <style>
         .errorMessage {
             color: red;
@@ -39,7 +39,7 @@
     </style>
 </head>
 <body>
-<?php include_once("UI/preloader.php"); ?>
+<?php include_once("commonUI/preloader.php"); ?>
 <!-- Body design starts here   -->
 <div class="signup-wrapper">
     <!--navigation-->
@@ -118,5 +118,5 @@
 <!-- Body design ends here   -->
 
 </body>
-<?php include_once("UI/scripts.php"); ?>
+<?php include_once("commonUI/scripts.php"); ?>
 </html>

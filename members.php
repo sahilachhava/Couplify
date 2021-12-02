@@ -16,11 +16,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php include_once("UI/head.php"); ?>
+    <?php include_once("commonUI/head.php"); ?>
 </head>
 <body>
-<?php include_once("UI/preloader.php"); ?>
-<?php include_once("UI/navigation.php"); ?>
+<?php include_once("commonUI/preloader.php"); ?>
+<?php include_once("commonUI/navigation.php"); ?>
 
 <!-- Body design code starts here   -->
 <div class="view-wrapper">
@@ -60,5 +60,5 @@
 </div>
 <!-- Body design code ends here   -->
 </body>
-<?php include_once("UI/scripts.php"); ?>
+<?php include_once("commonUI/scripts.php"); ?>
 </html>
