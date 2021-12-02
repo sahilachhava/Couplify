@@ -1,0 +1,32 @@
+IMPORTANT NOTES ABOUT COUPLIFY
+------------------------------
+GitHub Link: https://github.com/sahilachhava/Couplify
+
+root = "inside project folder"
+
+SQL Setup
+------------
+- You will find sqldump file inside "root/Database SQL Dump" folder, named "couplify_database.sql"
+- Along with that file you will get pdf containing all the demo users details categorized as premium and regular user
+
+-----------------
+
+About "root/controller/CouplifyDB.php" file:
+
+- The database name is "couplify", you can find on line no 8.
+- Mysql port is 3306, you can find it on line 7.
+- this project user is "project" and password is "project", you can find it on line 9 and 10.
+
+-----------------
+
+Note 1: if you still get error accessing after creating user, follow below steps,
+Step 1:  Delete the created user
+Step 2: create new user "project" but this time in `host` instead of "%" you will write "localhost"
+Step 3: give password "project" and rest is same, Now you will able to access the database
+
+-----------------
+
+Note 2: In very rarely case, if you get error accessing photos then do below steps:
+Step 1: open terminal and goto "root/assets"
+Step 2: change permission of "profilePhotos" & "photos" folder to read & write
+Step 3: Now you will be able to access all images

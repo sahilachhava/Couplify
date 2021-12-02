@@ -8,9 +8,9 @@ for college project <br /><br />
 **Demo User IDs**
 Users  | Email | Password
 ------------- | ------------- | -------------
-Son Goku  | goku@maildrop.cc | Goku@123
+Anos Voldigoad  | anos@maildrop.cc | Anos@123
 Cat Burglar Nami   | nami@maildrop.cc | Nami@123
-Erza Scarlet  | erza@maildrop.cc | Erza@123
+Boa Hancock  | hancock@maildrop.cc | Hancock@123
 <br />
 
 **Screenshots**

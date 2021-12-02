@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Dec 02, 2021 at 01:38 PM
+-- Generation Time: Dec 02, 2021 at 08:38 PM
 -- Server version: 5.7.34
 -- PHP Version: 8.0.8
 
@@ -72,9 +72,7 @@ INSERT INTO `address` (`city`, `state`, `country`, `userID`) VALUES
 ('Toronto', 'ON', 'Canada', 28),
 ('Quebec City', 'QC', 'Canada', 29),
 ('Peterborough', 'ON', 'Canada', 30),
-('Toronto', 'ON', 'Canada', 31),
-('Toronto', 'ON', 'Canada', 33),
-('Montreal', 'QC', 'Canada', 32);
+('Toronto', 'ON', 'Canada', 31);
 
 -- --------------------------------------------------------
 
@@ -124,6 +122,30 @@ CREATE TABLE `favourites` (
   `userID` int(11) NOT NULL,
   `favouritedUserID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `favourites`
+--
+
+INSERT INTO `favourites` (`userID`, `favouritedUserID`) VALUES
+(10, 31),
+(10, 3),
+(10, 9),
+(22, 27),
+(22, 6),
+(22, 25),
+(23, 27),
+(23, 22),
+(23, 31),
+(23, 3),
+(16, 20),
+(16, 10),
+(16, 23),
+(27, 14),
+(31, 23),
+(31, 27),
+(6, 22),
+(6, 3);
 
 -- --------------------------------------------------------
 
@@ -255,6 +277,40 @@ CREATE TABLE `messages` (
   `isRead` int(11) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `messages`
+--
+
+INSERT INTO `messages` (`senderID`, `receiverID`, `message`, `timeStamp`, `isRead`) VALUES
+(10, 16, 'wink', '2021-12-02 20:15:57', 1),
+(10, 16, 'Sanji-Kun, cook something special today for luffy', '2021-12-02 20:18:18', 1),
+(10, 9, 'wink', '2021-12-02 20:18:55', 0),
+(22, 27, 'wink', '2021-12-02 20:19:52', 0),
+(22, 6, 'wink', '2021-12-02 20:20:03', 1),
+(22, 6, 'Hey babe, where are you?', '2021-12-02 20:20:15', 1),
+(22, 23, 'Hey', '2021-12-02 20:20:36', 1),
+(22, 23, 'Did you confess your love to him?', '2021-12-02 20:21:01', 1),
+(22, 5, 'Hey, How are you Touka?', '2021-12-02 20:21:42', 0),
+(22, 10, 'Hey, how are you Nami?', '2021-12-02 20:22:28', 0),
+(23, 22, 'No, not yet. He is still in Wano, I will try when he gets back.', '2021-12-02 20:23:50', 0),
+(23, 31, 'wink', '2021-12-02 20:24:28', 1),
+(23, 3, 'wink', '2021-12-02 20:24:40', 1),
+(23, 3, 'How are you dear?', '2021-12-02 20:24:48', 1),
+(23, 3, 'Did you eat properly?', '2021-12-02 20:24:58', 1),
+(16, 20, 'wink', '2021-12-02 20:25:28', 0),
+(16, 20, 'Hey Beautiful', '2021-12-02 20:25:36', 0),
+(16, 10, 'Okay Nami-swan', '2021-12-02 20:26:28', 0),
+(16, 10, 'wink', '2021-12-02 20:26:33', 0),
+(27, 14, 'Hey dear', '2021-12-02 20:28:17', 0),
+(27, 14, 'wink', '2021-12-02 20:28:19', 0),
+(31, 23, 'wink', '2021-12-02 20:29:17', 1),
+(31, 27, 'Hello Anos volidi-GOAT', '2021-12-02 20:29:53', 0),
+(31, 27, 'wink', '2021-12-02 20:29:56', 0),
+(6, 22, 'Hey, I am just outside with Ban, will back soon!', '2021-12-02 20:30:41', 0),
+(6, 22, 'wink', '2021-12-02 20:30:43', 0),
+(3, 23, 'I am fine, Yeah I ate everything Sanji cooked for me', '2021-12-02 20:35:12', 0),
+(3, 31, 'wink', '2021-12-02 20:35:34', 0);
+
 -- --------------------------------------------------------
 
 --
@@ -268,6 +324,60 @@ CREATE TABLE `notifications` (
   `type` varchar(25) NOT NULL,
   `timeStamp` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `notifications`
+--
+
+INSERT INTO `notifications` (`userID`, `receiverID`, `type`, `timeStamp`) VALUES
+(10, 31, 'addfavourite', '2021-12-02 20:15:26'),
+(10, 3, 'addfavourite', '2021-12-02 20:15:40'),
+(10, 16, 'wink', '2021-12-02 20:15:57'),
+(10, 16, 'message', '2021-12-02 20:18:18'),
+(10, 9, 'addfavourite', '2021-12-02 20:18:49'),
+(10, 9, 'wink', '2021-12-02 20:18:55'),
+(22, 27, 'addfavourite', '2021-12-02 20:19:49'),
+(22, 27, 'wink', '2021-12-02 20:19:52'),
+(22, 6, 'addfavourite', '2021-12-02 20:20:01'),
+(22, 6, 'wink', '2021-12-02 20:20:03'),
+(22, 6, 'message', '2021-12-02 20:20:15'),
+(22, 23, 'message', '2021-12-02 20:20:36'),
+(22, 23, 'message', '2021-12-02 20:21:01'),
+(22, 25, 'addfavourite', '2021-12-02 20:21:17'),
+(22, 5, 'message', '2021-12-02 20:21:42'),
+(22, 10, 'message', '2021-12-02 20:22:28'),
+(23, 22, 'message', '2021-12-02 20:23:50'),
+(23, 27, 'addfavourite', '2021-12-02 20:24:11'),
+(23, 22, 'addfavourite', '2021-12-02 20:24:18'),
+(23, 31, 'addfavourite', '2021-12-02 20:24:24'),
+(23, 31, 'wink', '2021-12-02 20:24:28'),
+(23, 3, 'addfavourite', '2021-12-02 20:24:39'),
+(23, 3, 'wink', '2021-12-02 20:24:40'),
+(23, 3, 'message', '2021-12-02 20:24:48'),
+(23, 3, 'message', '2021-12-02 20:24:58'),
+(16, 20, 'addfavourite', '2021-12-02 20:25:26'),
+(16, 20, 'wink', '2021-12-02 20:25:28'),
+(16, 20, 'message', '2021-12-02 20:25:36'),
+(16, 10, 'message', '2021-12-02 20:26:28'),
+(16, 10, 'wink', '2021-12-02 20:26:33'),
+(16, 10, 'addfavourite', '2021-12-02 20:26:48'),
+(16, 23, 'addfavourite', '2021-12-02 20:26:59'),
+(27, 14, 'addfavourite', '2021-12-02 20:28:02'),
+(27, 14, 'message', '2021-12-02 20:28:17'),
+(27, 14, 'wink', '2021-12-02 20:28:19'),
+(31, 23, 'addfavourite', '2021-12-02 20:29:10'),
+(31, 23, 'wink', '2021-12-02 20:29:17'),
+(31, 27, 'addfavourite', '2021-12-02 20:29:33'),
+(31, 27, 'message', '2021-12-02 20:29:53'),
+(31, 27, 'wink', '2021-12-02 20:29:56'),
+(6, 22, 'addfavourite', '2021-12-02 20:30:21'),
+(6, 22, 'message', '2021-12-02 20:30:41'),
+(6, 22, 'wink', '2021-12-02 20:30:43'),
+(6, 3, 'addfavourite', '2021-12-02 20:30:59'),
+(6, 23, 'addfavourite', '2021-12-02 20:31:28'),
+(6, 23, 'removefavourite', '2021-12-02 20:31:30'),
+(3, 23, 'message', '2021-12-02 20:35:12'),
+(3, 31, 'wink', '2021-12-02 20:35:34');
 
 -- --------------------------------------------------------
 
@@ -296,7 +406,6 @@ INSERT INTO `notificationSettings` (`userID`, `allNotification`, `addFavourite`,
 (5, 1, 1, 1, 1, 1),
 (27, 1, 1, 1, 1, 1),
 (8, 1, 1, 1, 1, 1),
-(32, 1, 1, 1, 1, 1),
 (13, 1, 1, 1, 1, 1),
 (7, 1, 1, 1, 1, 1),
 (16, 1, 1, 1, 1, 1),
@@ -306,7 +415,6 @@ INSERT INTO `notificationSettings` (`userID`, `allNotification`, `addFavourite`,
 (18, 1, 1, 1, 1, 1),
 (23, 1, 1, 1, 1, 1),
 (11, 1, 1, 1, 1, 1),
-(33, 1, 1, 1, 1, 1),
 (2, 1, 1, 1, 1, 1),
 (31, 1, 1, 1, 1, 1),
 (1, 1, 1, 1, 1, 1),
@@ -337,6 +445,19 @@ CREATE TABLE `premiumPlan` (
   `endDate` datetime NOT NULL,
   `planType` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `premiumPlan`
+--
+
+INSERT INTO `premiumPlan` (`userID`, `startDate`, `endDate`, `planType`) VALUES
+(10, '2021-12-02 20:11:36', '2021-12-09 20:11:36', 'weekly'),
+(22, '2021-12-02 20:12:09', '2021-12-09 20:12:09', 'weekly'),
+(23, '2021-12-02 20:12:53', '2021-12-09 20:12:53', 'weekly'),
+(16, '2021-12-02 20:13:16', '2022-01-01 20:13:16', 'monthly'),
+(31, '2021-12-02 20:13:40', '2022-01-01 20:13:40', 'monthly'),
+(6, '2021-12-02 20:14:11', '2022-01-01 20:14:11', 'monthly'),
+(27, '2021-12-02 20:14:36', '2022-01-01 20:14:36', 'monthly');
 
 -- --------------------------------------------------------
 
@@ -477,16 +598,7 @@ INSERT INTO `userCuisines` (`cuisine`, `userID`) VALUES
 ('American Food', 14),
 ('Indian Cuisine', 14),
 ('Caribbean Cuisine', 14),
-('Cajun Food', 14),
-('Chinese Cuisine', 33),
-('Japanese Food', 33),
-('Mexican Cuisine', 33),
-('American Food', 33),
-('French Cuisine', 32),
-('Chinese Cuisine', 32),
-('Indian Cuisine', 32),
-('Mexican Cuisine', 32),
-('American Food', 32);
+('Cajun Food', 14);
 
 -- --------------------------------------------------------
 
@@ -547,9 +659,7 @@ INSERT INTO `userDetails` (`userID`, `userEmail`, `userPassword`, `firstName`, `
 (28, 'juvia@maildrop.cc', 'cfcbf7213ddb7b3eddbc14fc1d51b27d', 'Lockster', 'Juvia', 'assets/profilePhotos/28.jpg', 'Female', '2000-11-13', 'Don\'t let idiots ruin your day, date me instead!', 'Male', 'Single', 0, 'Medical Assistant', 0),
 (29, 'zoro@maildrop.cc', 'ebce0d3e88907dccaac79f9d66cd91a9', 'Zoro', 'Roronoa', 'assets/profilePhotos/29.jpg', 'Male', '1999-11-11', 'WiFi, sake, my bed, snuggles. Perfection.', 'Female', 'Single', 0, 'Customer Service Representative', 0),
 (30, 'kaneki@maildrop.cc', 'b7b1f206beeafc0328769d4c8132b7a0', 'Kaneki', 'Ken', 'assets/profilePhotos/30.jpg', 'Male', '2000-12-20', 'I don\'t smoke, drink or party every weekend. I don\'t play around or start drama to get attention. Yes, we do still exist!', 'Female', 'Single', 0, 'Businessperson', 0),
-(31, 'gojo@maildrop.cc', '46edea2ffa7fb51a932ba6357a6f2515', 'Gojo', 'Satoru', 'assets/profilePhotos/31.jpg', 'Male', '1989-12-07', 'I find that having a dirty mind makes ordinary conversations much more interesting.', 'Female', 'Single', 0, 'Cashier', 0),
-(32, 'sahil@maildrop.cc', 'e8c8f45019430b6f79862746e96d6e70', 'Sahil', 'Achhava', 'assets/profilePhotos/32.jpg', 'Male', '1997-11-26', 'I like watching anime', 'Female', 'Single', 0, 'IT Professional', 0),
-(33, 'rimuru@maildrop.cc', '6414bd9887c7495a98930e554a4aeaa5', 'Tempest', 'Rimuru', 'assets/profilePhotos/33.jpg', 'Male', '1995-04-17', 'I am the ruler of Jura Forest and leader of the Jura Tempest Federation.', 'Female', 'Single', 0, 'Entrepreneur', 0);
+(31, 'gojo@maildrop.cc', '46edea2ffa7fb51a932ba6357a6f2515', 'Gojo', 'Satoru', 'assets/profilePhotos/31.jpg', 'Male', '1989-12-07', 'I find that having a dirty mind makes ordinary conversations much more interesting.', 'Female', 'Single', 0, 'Cashier', 0);
 
 -- --------------------------------------------------------
 
@@ -690,17 +800,7 @@ INSERT INTO `userHobbies` (`hobby`, `userID`) VALUES
 ('Dancing', 14),
 ('Painting', 14),
 ('Yoga', 14),
-('Gaming', 14),
-('Gaming', 33),
-('Sports', 33),
-('Teaching', 33),
-('Swimming', 33),
-('Travelling', 33),
-('Singing', 32),
-('Cooking', 32),
-('Gaming', 32),
-('Teaching', 32),
-('Travelling', 32);
+('Gaming', 14);
 
 -- --------------------------------------------------------
 
@@ -839,12 +939,7 @@ INSERT INTO `userLanguages` (`language`, `userID`) VALUES
 ('Spanish', 24),
 ('Vietnamese', 14),
 ('French', 14),
-('Urdu', 14),
-('English', 33),
-('Japanese', 33),
-('French', 33),
-('English', 32),
-('Hindi', 32);
+('Urdu', 14);
 
 -- --------------------------------------------------------
 
@@ -986,9 +1081,7 @@ INSERT INTO `userPhotos` (`photo`, `userID`) VALUES
 ('5.jpg', 25),
 ('1.jpg', 13),
 ('2.jpg', 13),
-('3.jpg', 13),
-('My photo.jpg', 32),
-('Photo.jpg', 32);
+('3.jpg', 13);
 
 --
 -- Indexes for dumped tables
