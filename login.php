@@ -85,7 +85,7 @@
                             </div>
                             <div class="field is-flex">
                                 <div class="switch-block"></div>
-                                <a href="#">Forgot Password?</a>
+                                <a href="forgotPassword.php">Forgot Password?</a>
                             </div>
                         </div>
 

@@ -48,6 +48,16 @@ class CouplifyDB
         }
     }
 
+    public function changePassword($currentUserID, $newPassword): bool
+    {
+        $encryptedPassword = md5($newPassword);
+        $resultOfQuery = $this->connectionToDatabase->prepare("update userDetails set userPassword = ? where userID = ?");
+        if(!$resultOfQuery->execute(array($encryptedPassword, $currentUserID))){
+            return false;
+        }
+        return true;
+    }
+
     public function createProfile($profile): bool
     {
         $queryString = "UPDATE userDetails SET profilePhoto = {$profile['photoPath']}, 
@@ -67,6 +77,13 @@ class CouplifyDB
         //ADDING ADDRESS OF USER
         $resultOfQuery = $this->connectionToDatabase->prepare("INSERT INTO address(city, state, country, userID) values(?,?,?,?)");
         $queryStatus = $resultOfQuery->execute(array($profile['city'], $profile['state'], $profile['country'], $profile['currentUserID']));
+        if(!$queryStatus){
+            return false;
+        }
+
+        //ADDING NOTIFICATION SETTINGS OF USER
+        $resultOfQuery = $this->connectionToDatabase->prepare("INSERT INTO notificationSettings(userID) value(?)");
+        $queryStatus = $resultOfQuery->execute(array($profile['currentUserID']));
         if(!$queryStatus){
             return false;
         }
@@ -145,6 +162,16 @@ class CouplifyDB
             $resultOfQuery->execute(array($language, $profile['currentUserID']));
         }
 
+        return true;
+    }
+
+    public function updateNotificationSettings($updatedNotificationSettings): bool
+    {
+        $resultOfQuery = $this->connectionToDatabase->prepare("UPDATE notificationSettings SET allNotification = ?, addFavourite = ?, removeFavourite = ?, messages = ?, winks = ? where userID = ?");
+        $queryResult = $resultOfQuery->execute($updatedNotificationSettings);
+        if(!$queryResult){
+            return false;
+        }
         return true;
     }
 
@@ -299,12 +326,30 @@ class CouplifyDB
         return $resultOfQuery->fetch();
     }
 
+    public function getNotificationSettings($currentUserID): array
+    {
+        $resultOfQuery = $this->connectionToDatabase->prepare("select * from notificationSettings where userID = {$currentUserID}");
+        $resultOfQuery->execute();
+        return $resultOfQuery->fetch();
+    }
+
     public function isUserExists($userID): bool
     {
-        $resultOfQuery = $this->connectionToDatabase->prepare("select * from userDetails where userID = ".$userID);
+        $resultOfQuery = $this->connectionToDatabase->prepare("select * from userDetails where userID = {$userID}");
         $resultOfQuery->execute();
         if($resultOfQuery->fetch()){
             return true;
+        }else{
+            return false;
+        }
+    }
+    public function isEmailExists($userEmail): int|bool //for Forgot password
+    {
+        $resultOfQuery = $this->connectionToDatabase->prepare("select * from userDetails where userEmail = '{$userEmail}'");
+        $resultOfQuery->execute();
+        $row = $resultOfQuery->fetch();
+        if($row){
+            return $row["userID"];
         }else{
             return false;
         }
@@ -313,8 +358,27 @@ class CouplifyDB
     public function sendNotification($userID, $receiverID, $notificationType){
         date_default_timezone_set('UTC');
         $timeStamp = date('Y-m-d H:i:s');
-        $resultOfQuery = $this->connectionToDatabase->prepare("insert into notifications(userID, receiverID, type, timeStamp) values(?,?,?,?)");
-        $resultOfQuery->execute(array($userID, $receiverID, $notificationType, $timeStamp));
+        $notificationSettings = $this->getNotificationSettings($receiverID);
+        $sendFlag = false;
+
+        if($notificationSettings["allNotification"] == 0){
+            return;
+        }else{
+            if($notificationType == "wink" && $notificationSettings["winks"] == 1){
+                $sendFlag = true;
+            }else if($notificationType == "message" && $notificationSettings["messages"] == 1){
+                $sendFlag = true;
+            }else if($notificationType == "addfavourite" && $notificationSettings["addFavourite"] == 1){
+                $sendFlag = true;
+            }else if($notificationType == "removefavourite" && $notificationSettings["removeFavourite"] == 1){
+                $sendFlag = true;
+            }
+        }
+
+        if($sendFlag){
+            $resultOfQuery = $this->connectionToDatabase->prepare("insert into notifications(userID, receiverID, type, timeStamp) values(?,?,?,?)");
+            $resultOfQuery->execute(array($userID, $receiverID, $notificationType, $timeStamp));
+        }
     }
 
     public function getNotifications($currentUserID): array
@@ -354,9 +418,24 @@ class CouplifyDB
 
     public function getPremiumDetails($userID): array|bool
     {
+        date_default_timezone_set('UTC');
+        $currentDate = date('Y-m-d H:i:s');
         $resultOfQuery = $this->connectionToDatabase->prepare("select * from premiumPlan where userID = {$userID}");
         $resultOfQuery->execute();
-        return $resultOfQuery->fetch();
+        $row = $resultOfQuery->fetch();
+
+        if($row){
+            if($currentDate > $row['endDate']){
+                //Premium Expired
+                $resultOfQuery = $this->connectionToDatabase->prepare("delete from premiumPlan where userID = {$userID}");
+                $resultOfQuery->execute();
+                return false;
+            }
+        }else{
+            return false;
+        }
+
+        return $row;
     }
 
     public function sendMessage($senderID, $receiverID, $message)

@@ -34,3 +34,4 @@
 
 <script src="assets/js/profile.js"></script>
 <script src="assets/js/shop.js"></script>
+<script src="assets/js/settings.js"></script>

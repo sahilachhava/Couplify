@@ -183,15 +183,15 @@
                                         <div class="summary-card">
                                             <div class="order-line">
                                                 <span>Subtotal</span>
-                                                <span><?= number_format((float)$_SESSION["subTotal"] ?? 0, 2, '.', ''); ?></span>
+                                                <span><?= number_format((float)(isset($_SESSION["subTotal"])) ? $_SESSION["subTotal"] : 0, 2, '.', ''); ?></span>
                                             </div>
                                             <div class="order-line">
                                                 <span>Taxes (5%)</span>
-                                                <span><?= number_format((float)$_SESSION["tax"] ?? 0, 2, '.', ''); ?></span>
+                                                <span><?= number_format((float)(isset($_SESSION["tax"])) ? $_SESSION["tax"] : 0, 2, '.', ''); ?></span>
                                             </div>
                                             <div id="total-amount" class="order-line">
                                                 <span class="is-total">Total</span>
-                                                <span class="is-total"><?= number_format((float)$_SESSION["totalAmount"] ?? 0, 2, '.', ''); ?></span>
+                                                <span class="is-total"><?= number_format((float)(isset($_SESSION["totalAmount"])) ? $_SESSION["totalAmount"] : 0, 2, '.', ''); ?></span>
                                             </div>
                                             <div class="button-wrap">
                                                 <button onclick="document.getElementById('buyPlan').click();" class="button is-solid primary-button raised is-fullwidth">Confirm Payment</button>
@@ -224,7 +224,7 @@
                                 <span>Subtotal</span>
                             </div>
                             <div class="amount">
-                                <span data-currency="USD">$<?= number_format((float)$_SESSION["subTotal"] ?? 0, 2, '.', ''); ?></span>
+                                <span data-currency="USD">$<?= number_format((float)(isset($_SESSION["subTotal"])) ? $_SESSION["subTotal"] : 0, 2, '.', ''); ?></span>
                             </div>
                         </div>
                         <div class="order-line">
@@ -232,7 +232,7 @@
                                 <span>Taxes</span>
                             </div>
                             <div class="amount">
-                                <span data-currency="USD">$<?= number_format((float)$_SESSION["tax"] ?? 0, 2, '.', ''); ?></span>
+                                <span data-currency="USD">$<?= number_format((float)(isset($_SESSION["tax"])) ? $_SESSION["tax"] : 0, 2, '.', ''); ?></span>
                             </div>
                         </div>
                         <div class="order-line">
@@ -240,7 +240,7 @@
                                 <span>Total</span>
                             </div>
                             <div class="amount is-total">
-                                <span data-currency="USD">$<?= number_format((float)$_SESSION["totalAmount"] ?? 0, 2, '.', ''); ?></span>
+                                <span data-currency="USD">$<?= number_format((float)(isset($_SESSION["totalAmount"])) ? $_SESSION["totalAmount"] : 0, 2, '.', ''); ?></span>
                             </div>
                         </div>
                     </div>
