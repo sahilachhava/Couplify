@@ -48,7 +48,7 @@
                     "lookingFor" => "'".$_POST["lookingFor"]."'",
                     "dateOfBirth" => "'".$dateOfBirth."'",
                     "job" => "'".$_POST["job"]."'",
-                    "aboutMe" => "'".$_POST["aboutMe"]."'",
+                    "aboutMe" => '"'.$_POST["aboutMe"].'"',
                     "city" => $_POST["city"],
                     "state" => $_POST["state"],
                     "country" => $_POST["country"],

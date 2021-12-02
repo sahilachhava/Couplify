@@ -84,8 +84,8 @@
                         <div class="profile-subheader">
                             <div class="subheader-end is-hidden-mobile" style="text-align: left;">
                                 <?php
-                                    if($currentUser->isPremium()){
-                                        if(isset($_SESSION["userID"])){
+                                    if(isset($_SESSION["userID"])){
+                                            if($currentUser->isPremium()){
                                             if(in_array($userDetails, $currentUser->getFavouritedUsers())){
                                 ?>
                                         <a onclick="document.getElementById('removeFromFavourite').click();" class="button has-icon is-bold">
