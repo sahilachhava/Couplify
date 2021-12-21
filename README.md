@@ -1,9 +1,8 @@
 # Couplify
 
 **Developed in 2021** <br />
-for college project <br /><br />
 
-*This website is created as college project, it's an online dating platform based on PHP*<br />
+*It's an online dating platform developed with PHP*<br />
 
 **Demo User IDs**
 Users  | Email | Password
